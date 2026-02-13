@@ -1,0 +1,605 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Invitación | Boda</title>
+  <meta name="description" content="Invitación de boda tipo tarjetas con música, RSVP WhatsApp, dress code, regalos, tips y fotos." />
+
+  <style>
+    :root{
+      --bg:#fbfbfd;
+      --card: rgba(255,255,255,.86);
+      --text:#15161a;
+      --muted:#6b7280;
+      --line:rgba(0,0,0,.10);
+      --accent:#b08a6a;      /* dorado suave */
+      --accent2:#111827;     /* negro elegante */
+      --shadow: 0 18px 60px rgba(0,0,0,.12);
+      --radius: 22px;
+      --cardW: 520px;        /* tamaño tipo móvil/tablet */
+      --cardH: 720px;        /* todas del mismo tamaño */
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 700px at 50% -10%, rgba(176,138,106,.18), transparent 60%),
+        radial-gradient(900px 600px at 10% 10%, rgba(17,24,39,.10), transparent 60%),
+        var(--bg);
+      overflow-x:hidden;
+    }
+    .wrap{
+      max-width: calc(var(--cardW) + 28px);
+      margin: 0 auto;
+      padding: 14px 14px 90px;
+      display:grid;
+      gap: 14px;
+    }
+
+    /* Card layout (todas iguales) */
+    .card{
+      width: 100%;
+      max-width: var(--cardW);
+      height: var(--cardH);
+      margin: 0 auto;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      background: var(--card);
+      overflow:hidden;
+      backdrop-filter: blur(10px);
+      position:relative;
+    }
+    @media (max-width: 560px){
+      :root{ --cardW: 100%; --cardH: 86vh; }
+      .wrap{max-width: 100%;}
+    }
+
+    .inner{
+      height:100%;
+      padding: 18px;
+      display:flex;
+      flex-direction:column;
+      gap: 12px;
+    }
+
+    h2{
+      margin:0;
+      font-size: 20px;
+      letter-spacing:.2px;
+    }
+    .muted{color:var(--muted); line-height:1.65}
+    .btn{
+      appearance:none;border:0;cursor:pointer;
+      padding: 12px 14px;
+      border-radius: 14px;
+      font-weight: 900;
+      letter-spacing:.2px;
+      display:inline-flex;align-items:center;gap:10px;
+      text-decoration:none;
+      user-select:none;
+      width: fit-content;
+    }
+    .btn-primary{
+      background: linear-gradient(135deg, rgba(176,138,106,1), rgba(176,138,106,.80));
+      color:#fff;
+      box-shadow: 0 18px 45px rgba(176,138,106,.35);
+    }
+    .btn-soft{
+      background: rgba(255,255,255,.75);
+      border: 1px solid var(--line);
+      color: var(--accent2);
+    }
+    .row{display:flex; gap:10px; flex-wrap:wrap}
+
+    /* Hero card */
+    .hero{
+      background:#111;
+      color:#fff;
+    }
+    .hero::before{
+      content:"";
+      position:absolute; inset:0;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,.18), rgba(0,0,0,.70)),
+        url("assets/img/hero.jpg") center/cover no-repeat;
+      transform: scale(1.03);
+      filter:saturate(1.05) contrast(1.02);
+    }
+    .hero::after{
+      content:"";
+      position:absolute; inset:0;
+      background: radial-gradient(750px 520px at 50% 12%, rgba(176,138,106,.35), transparent 55%);
+      mix-blend-mode: soft-light;
+    }
+    .hero .inner{position:relative}
+    .pill{
+      width: fit-content;
+      display:inline-flex; align-items:center; gap:10px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.26);
+      backdrop-filter: blur(10px);
+      font-size: 13px;
+      letter-spacing:.2px;
+    }
+    .title{
+      margin: 4px 0 0;
+      font-size: clamp(30px, 5vw, 52px);
+      line-height:1.03;
+      letter-spacing:.4px;
+      text-shadow: 0 14px 35px rgba(0,0,0,.35);
+    }
+    .sub{
+      margin:0;
+      color: rgba(255,255,255,.86);
+      font-size: 16px;
+      line-height:1.6;
+      max-width: 52ch;
+    }
+    .heroFooter{
+      margin-top:auto;
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+    }
+
+    /* “popup style” content box (similar a tus screenshots) */
+    .box{
+      margin-top: 8px;
+      border-radius: 18px;
+      border: 1px solid rgba(176,138,106,.35);
+      background: rgba(255,255,255,.86);
+      padding: 14px;
+    }
+    .boxTitle{
+      display:flex; align-items:center; gap:10px;
+      font-weight: 1000;
+      color: var(--accent2);
+      margin-bottom: 6px;
+    }
+    .iconBadge{
+      width:36px; height:36px; border-radius: 12px;
+      display:grid; place-items:center;
+      border:1px solid rgba(176,138,106,.25);
+      background: rgba(176,138,106,.10);
+    }
+
+    /* Form */
+    .field{display:flex; flex-direction:column; gap:6px; margin-top: 10px}
+    label{font-weight: 900; color: var(--accent2); font-size: 13px; letter-spacing:.2px}
+    input, textarea{
+      width:100%;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.85);
+      font-size: 15px;
+      outline:none;
+    }
+    textarea{min-height: 92px; resize: vertical}
+    .radioRow{
+      display:flex; gap:12px; flex-wrap:wrap;
+      margin-top: 8px;
+    }
+    .radioPill{
+      display:flex; align-items:center; gap:8px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.78);
+      font-weight: 900;
+      cursor:pointer;
+      user-select:none;
+    }
+    .radioPill input{width:auto; margin:0}
+    .small{font-size: 13px; color: var(--muted)}
+
+    /* Dress images */
+    .dressGrid{
+      margin-top: 10px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .dressImg{
+      border-radius: 16px;
+      overflow:hidden;
+      border:1px solid var(--line);
+      background:#fff;
+      height: 220px;
+    }
+    .dressImg img{
+      width:100%; height:100%;
+      object-fit: cover;
+      display:block;
+    }
+    @media (max-width: 560px){
+      .dressGrid{grid-template-columns: 1fr}
+      .dressImg{height: 240px}
+    }
+
+    /* Tips list */
+    ul{margin: 10px 0 0; padding-left: 18px}
+    li{margin: 8px 0}
+
+    /* Photos grid (pequeñas) */
+    .photosGrid{
+      margin-top: 10px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      flex: 1 1 auto;
+      align-content:start;
+    }
+    .ph{
+      border-radius: 16px;
+      overflow:hidden;
+      border:1px solid var(--line);
+      background:#fff;
+      height: 170px;
+      position:relative;
+    }
+    .ph img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.02)}
+    .ph::after{
+      content:"";
+      position:absolute; inset:0;
+      background: linear-gradient(180deg, rgba(0,0,0,.00), rgba(0,0,0,.14));
+      pointer-events:none;
+    }
+    @media (max-width: 560px){
+      .photosGrid{grid-template-columns: 1fr 1fr}
+      .ph{height: 150px}
+    }
+
+    /* Music button floating */
+    .musicBtn{
+      position: fixed;
+      right: 14px;
+      bottom: 14px;
+      z-index: 999;
+      border-radius: 999px;
+      padding: 12px 14px;
+      border:1px solid rgba(0,0,0,.10);
+      background: rgba(255,255,255,.90);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 18px 60px rgba(0,0,0,.18);
+      font-weight: 1000;
+      cursor:pointer;
+      display:flex; align-items:center; gap:10px;
+    }
+    .dot{
+      width:10px;height:10px;border-radius:99px;
+      background: var(--accent);
+      box-shadow: 0 0 0 5px rgba(176,138,106,.18);
+    }
+    .state{color:var(--muted); font-weight:1000}
+
+    /* Hidden YT iframe */
+    .ytAudio{
+      position: fixed;
+      left: -9999px;
+      top: -9999px;
+      width: 1px; height: 1px;
+      opacity: 0;
+      pointer-events:none;
+    }
+
+    /* subtle divider */
+    .divider{
+      height:1px; background: rgba(0,0,0,.08);
+      width:100%; margin: 6px 0;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- 1) TARJETA PRESENTACIÓN (foto + música) -->
+  <section class="card hero">
+    <div class="inner">
+      <div class="pill">✨ Invitación · Boda</div>
+      <div class="title" id="names">Nicole & (Nombre)</div>
+      <p class="sub" id="heroLine">Acompáñanos a celebrar este día tan especial.</p>
+
+      <div class="pill">🗓️ <span id="eventDateText">Fecha · Hora</span></div>
+
+      <div class="heroFooter">
+        <div class="row">
+          <button class="btn btn-primary" id="musicStartBtn">🎶 Activar música</button>
+          <a class="btn btn-ghost btn-soft" href="#rsvpCard" style="text-decoration:none">⬇️ Desliza</a>
+        </div>
+        <div class="small" style="color:rgba(255,255,255,.80)">
+          *En celulares, es necesaria la confirmaciónpara iniciar la música (regla del navegador).
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap">
+
+    <!-- 2) TARJETA ASISTENCIA (WhatsApp) -->
+    <section class="card" id="rsvpCard">
+      <div class="inner">
+        <div class="box">
+          <div class="boxTitle">
+            <div class="iconBadge">🎉</div>
+            <div style="font-size:20px">¿Asistes a la celebración?</div>
+          </div>
+
+          <div class="radioRow">
+            <label class="radioPill"><input type="radio" name="asiste" value="Sí, confirmo" checked> ¡Sí! Confirmo</label>
+            <label class="radioPill"><input type="radio" name="asiste" value="No puedo"> No puedo 😢</label>
+          </div>
+
+          <div class="field">
+            <label>Nombre completo</label>
+            <input id="rsvpName" placeholder="Pon tu nombre aquí" />
+          </div>
+
+          <div class="field">
+            <label>Información importante</label>
+            <textarea id="rsvpNote" placeholder="Ej: alergias / iré con 1 acompañante"></textarea>
+          </div>
+
+          <div class="row" style="margin-top:12px">
+            <button class="btn btn-primary" id="sendWhatsBtn">Enviar</button>
+            <button class="btn btn-soft" id="clearBtn" type="button">Limpiar</button>
+          </div>
+
+          <div class="divider"></div>
+          <div class="small"><b>Importante:</b> evento solo para adultos. <b>No niños</b> 🙏</div>
+        </div>
+
+        <div class="muted" style="margin-top:auto">
+          Tu confirmación se envía por WhatsApp a la pareja.
+        </div>
+      </div>
+    </section>
+
+    <!-- 3) TARJETA CÓDIGO DE VESTIMENTA -->
+    <section class="card" id="dressCard">
+      <div class="inner">
+        <h2>👗 Código de vestimenta</h2>
+        <p class="muted"><b>Gala - Formal</b></p>
+
+        <div class="dressGrid">
+          <div class="dressImg" title="Ejemplos para hombres">
+            <img src="assets/img/dress-hombres.jfif" alt="Ejemplos de vestimenta para hombres">
+          </div>
+          <div class="dressImg" title="Ejemplos para mujeres">
+            <img src="assets/img/dress-mujeres.jfif" alt="Ejemplos de vestimenta para mujeres">
+          </div>
+        </div>
+
+        <div class="muted" style="margin-top:auto">
+          Tip: tonos sobrios, telas elegantes y zapatos acordes.
+        </div>
+      </div>
+    </section>
+
+    <!-- 4) TARJETA REGALOS (SINPE) -->
+    <section class="card" id="giftsCard">
+      <div class="inner">
+        <div class="box">
+          <div class="boxTitle">
+            <div class="iconBadge">🎁</div>
+            <div style="font-size:22px">Regalos</div>
+          </div>
+
+          <p class="muted" style="margin:0">
+            Tu presencia es lo más importante. Si deseas tener un detalle, puedes contribuir mediante:
+          </p>
+
+          <div style="margin-top:12px" class="muted">
+            <b>SINPE Móvil</b><br>
+            <span style="font-size:18px;font-weight:1000;color:var(--accent2)">7099 2183</span><br>
+            <span style="font-size:18px;font-weight:1000;color:var(--accent2)">8694 9063</span>
+          </div>
+
+          <div class="small" style="margin-top:10px">
+            (ajustar estos datos)
+          </div>
+        </div>
+
+        <div class="muted" style="margin-top:auto">
+          Gracias por su cariño 💛
+        </div>
+      </div>
+    </section>
+
+    <!-- 5) TARJETA TIPS -->
+    <section class="card" id="tipsCard">
+      <div class="inner">
+        <div class="box">
+          <div class="boxTitle">
+            <div class="iconBadge">📋</div>
+            <div style="font-size:22px">Tips y Notas</div>
+          </div>
+
+          <ul class="muted">
+            <li><b>¡Por favor ser puntuales!</b></li>
+            <li>Queremos que disfrutes al máximo, por eso decidimos que sea un evento <b>solo para adultos</b>.</li>
+            <li><b>Confirmar asistencia</b> a la brevedad (antes de la fecha límite que indique la pareja).</li>
+            <li>Llevar abrigo si deseas disfrutar de los espacios exteriores.</li>
+            <li>Olvidarse de todo… y ¡¡¡a disfrutar!!!</li>
+          </ul>
+        </div>
+
+        <div class="muted" style="margin-top:auto">
+          Cualquier duda, la pareja te responde por WhatsApp.
+        </div>
+      </div>
+    </section>
+
+    <!-- 6) TARJETA FOTOS (pequeñas) -->
+    <section class="card" id="photosCard">
+      <div class="inner">
+        <h2>📸 Fotos</h2>
+        <p class="muted" style="margin-top:0">Un poquito de nosotros…</p>
+
+        <div class="photosGrid">
+          <div class="ph"><img src="assets/img/DSC06064.JPG" alt="Foto 1"></div>
+          <div class="ph"><img src="assets/img/DSC05947.JPG" alt="Foto 2"></div>
+          <div class="ph"><img src="assets/img/DSC05955.JPG" alt="Foto 3"></div>
+          <div class="ph"><img src="assets/img/DSC06124.JPG" alt="Foto 4"></div>
+          <div class="ph"><img src="assets/img/DSC06137.JPG" alt="Foto 5"></div>
+          <div class="ph"><img src="assets/img/DSC06144.JPG" alt="Foto 6"></div>
+          <div class="ph"><img src="assets/img/DSC05975.JPG" alt="Foto 7"></div>
+          <div class="ph"><img src="assets/img/DSC05982.JPG" alt="Foto 8"></div>
+        </div>
+
+        <div class="muted" style="margin-top:auto">
+          Hecho con cariño 💛
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Música: YouTube oculto -->
+  <div class="ytAudio"><div id="player"></div></div>
+
+  <!-- Botón música flotante -->
+  <button class="musicBtn" id="musicBtn" type="button" aria-label="Música">
+    <span class="dot" id="dot"></span>
+    <span>Música</span>
+    <span class="state" id="musicState">OFF</span>
+  </button>
+
+  <script>
+    /***********************
+     * EDITA SOLO ESTO 👇  *
+     ***********************/
+    const DATA = {
+      nombres: "Nicole & Pedro",
+      heroLine: "Acompáñanos a celebrar este día tan especial.",
+      // PON AQUÍ LA FECHA/HORA REAL (CR -06:00). Ej: "2026-08-22T16:00:00-06:00"
+      fechaEventoISO: "2026-08-22T16:00:00-06:00",
+      whatsappDestino: "50670992183"
+    };
+
+    // Música YouTube: tu link rbaoKL1Ei0c
+    // OJO: tú escribiste "127 al 42", pero eso no tiene sentido.
+    // Yo lo dejo en 17 -> 42 como ella pidió antes. Si de verdad es 127 -> 142, cambia aquí:
+    const YT_SEGMENT = { videoId: "rbaoKL1Ei0c", start: 17, end: 42 };
+    /***********************/
+
+    // UI text
+    document.getElementById("names").textContent = DATA.nombres;
+    document.getElementById("heroLine").textContent = DATA.heroLine;
+
+    // Date text
+    const eventDate = new Date(DATA.fechaEventoISO);
+    const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+    const fmt = new Intl.DateTimeFormat("es-CR", { weekday:"long", year:"numeric", month:"long", day:"numeric" });
+    const tmt = new Intl.DateTimeFormat("es-CR", { hour:"numeric", minute:"2-digit" });
+    document.getElementById("eventDateText").textContent = `${cap(fmt.format(eventDate))} · ${tmt.format(eventDate)}`;
+
+    /***********************
+     * RSVP -> WhatsApp     *
+     ***********************/
+    function getAsisteValue(){
+      const checked = document.querySelector('input[name="asiste"]:checked');
+      return checked ? checked.value : "Sí, confirmo";
+    }
+
+    function buildWhatsAppMessage(){
+      const nombre = (document.getElementById("rsvpName").value || "").trim();
+      const nota = (document.getElementById("rsvpNote").value || "").trim();
+      const asiste = getAsisteValue();
+
+      const fechaTxt = `${cap(fmt.format(eventDate))} · ${tmt.format(eventDate)}`;
+
+      let msg = `*Confirmación de asistencia*\n`;
+      msg += `• Asistencia: *${asiste}*\n`;
+      msg += `• Nombre: *${nombre || "Anónimo"}*\n`;
+      msg += `• Evento: ${DATA.nombres}\n`;
+      msg += `• Fecha: ${fechaTxt}\n`;
+      if (nota) msg += `• Nota: ${nota}\n`;
+
+      return msg;
+    }
+
+    document.getElementById("sendWhatsBtn").addEventListener("click", () => {
+      const number = (DATA.whatsappDestino || "").trim();
+      if (!number || number === "50600000000"){
+        alert("Falta configurar el número de WhatsApp (whatsappDestino) en DATA.");
+        return;
+      }
+      const msg = buildWhatsAppMessage();
+      const url = `https://wa.me/${encodeURIComponent(number)}?text=${encodeURIComponent(msg)}`;
+      window.open(url, "_blank", "noopener");
+    });
+
+    document.getElementById("clearBtn").addEventListener("click", () => {
+      document.getElementById("rsvpName").value = "";
+      document.getElementById("rsvpNote").value = "";
+    });
+
+    /***********************
+     * Música YouTube API   *
+     ***********************/
+    let player = null;
+    let isPlaying = false;
+
+    const musicBtn = document.getElementById("musicBtn");
+    const musicState = document.getElementById("musicState");
+    const dot = document.getElementById("dot");
+    const musicStartBtn = document.getElementById("musicStartBtn");
+
+    const tag = document.createElement("script");
+    tag.src = "https://www.youtube.com/iframe_api";
+    document.head.appendChild(tag);
+
+    window.onYouTubeIframeAPIReady = function(){
+      player = new YT.Player("player", {
+        height:"1", width:"1",
+        videoId: YT_SEGMENT.videoId,
+        playerVars: { autoplay:0, controls:0, disablekb:1, fs:0, modestbranding:1, rel:0, start: YT_SEGMENT.start }
+      });
+
+      // Loop del segmento
+      setInterval(() => {
+        if(!player || !isPlaying) return;
+        const t = player.getCurrentTime ? player.getCurrentTime() : 0;
+        if (t >= YT_SEGMENT.end - 0.15){
+          player.seekTo(YT_SEGMENT.start, true);
+          player.playVideo();
+        }
+      }, 200);
+    };
+
+    function setMusicUI(on){
+      isPlaying = on;
+      musicState.textContent = on ? "ON" : "OFF";
+      musicState.style.color = on ? "#0f7a3a" : "var(--muted)";
+      dot.style.background = on ? "#0f7a3a" : "var(--accent)";
+    }
+
+    function playMusic(){
+      if(!player) return;
+      player.seekTo(YT_SEGMENT.start, true);
+      player.playVideo();
+      setMusicUI(true);
+    }
+    function pauseMusic(){
+      if(!player) return;
+      player.pauseVideo();
+      setMusicUI(false);
+    }
+
+    musicBtn.addEventListener("click", () => {
+      if(!player) return;
+      if(!isPlaying) playMusic();
+      else pauseMusic();
+    });
+
+    musicStartBtn.addEventListener("click", () => playMusic());
+  </script>
+</body>
+</html>
