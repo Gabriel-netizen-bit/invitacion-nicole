@@ -3,603 +3,1171 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Invitación | Boda</title>
-  <meta name="description" content="Invitación de boda tipo tarjetas con música, RSVP WhatsApp, dress code, regalos, tips y fotos." />
+  <meta name="color-scheme" content="light only" />
+  <title>Invitación | Pedro y Nicole</title>
 
   <style>
+    /* =========================================================
+       0) VARIABLES (colores tipo Canva: dorado/beige + limpio)
+       ========================================================= */
     :root{
-      --bg:#fbfbfd;
-      --card: rgba(255,255,255,.86);
-      --text:#15161a;
-      --muted:#6b7280;
-      --line:rgba(0,0,0,.10);
-      --accent:#b08a6a;      /* dorado suave */
-      --accent2:#111827;     /* negro elegante */
-      --shadow: 0 18px 60px rgba(0,0,0,.12);
+      --bg: #f6f2ee;
+      --card: #fbfaf8;
+      --border: #d8c9b8;
+      --accent: #b89b75;
+      --accent-2:#9e8463;
+      --text:#2a2520;
+      --muted:#6a6056;
+      --shadow: 0 18px 45px rgba(0,0,0,.10);
       --radius: 22px;
-      --cardW: 520px;        /* tamaño tipo móvil/tablet */
-      --cardH: 720px;        /* todas del mismo tamaño */
+      --maxw: 560px;
+      --hero-url: none; /* se setea por JS */
     }
-    *{box-sizing:border-box}
-    html,body{height:100%}
+
+    /* =========================================================
+       1) BASE
+       ========================================================= */
+    *{ box-sizing:border-box; }
     body{
       margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color:var(--text);
-      background:
-        radial-gradient(1200px 700px at 50% -10%, rgba(176,138,106,.18), transparent 60%),
-        radial-gradient(900px 600px at 10% 10%, rgba(17,24,39,.10), transparent 60%),
-        var(--bg);
-      overflow-x:hidden;
+      background: radial-gradient(1200px 1200px at 50% 0%, #ffffff 0%, var(--bg) 52%, #efe7df 100%);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
+
     .wrap{
-      max-width: calc(var(--cardW) + 28px);
+      width:100%;
+      max-width: var(--maxw);
       margin: 0 auto;
-      padding: 14px 14px 90px;
-      display:grid;
-      gap: 14px;
-    }
-
-    /* Card layout (todas iguales) */
-    .card{
-      width: 100%;
-      max-width: var(--cardW);
-      height: var(--cardH);
-      margin: 0 auto;
-      border-radius: var(--radius);
-      border: 1px solid var(--line);
-      box-shadow: var(--shadow);
-      background: var(--card);
-      overflow:hidden;
-      backdrop-filter: blur(10px);
-      position:relative;
-    }
-    @media (max-width: 560px){
-      :root{ --cardW: 100%; --cardH: 86vh; }
-      .wrap{max-width: 100%;}
-    }
-
-    .inner{
-      height:100%;
-      padding: 18px;
+      padding: 20px 14px 48px;
       display:flex;
       flex-direction:column;
-      gap: 12px;
+      gap:16px;
+    }
+
+    /* Tarjeta estilo Canva */
+    .card{
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+
+    .card-inner{ padding: 18px 18px 20px; }
+
+    .card-head{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      text-align:center;
+      gap:8px;
+      margin-bottom:12px;
+    }
+
+    .icon{
+      width: 44px; height: 44px;
+      border-radius: 999px;
+      border: 2px solid var(--border);
+      display:grid;
+      place-items:center;
+      color: var(--accent);
+      background:#fff;
+      user-select:none;
     }
 
     h2{
       margin:0;
-      font-size: 20px;
-      letter-spacing:.2px;
+      font-size: 30px;
+      line-height: 1.1;
+      color: var(--accent);
+      font-weight: 650;
+      letter-spacing: .2px;
+      font-family: ui-serif, Georgia, "Times New Roman", serif;
     }
-    .muted{color:var(--muted); line-height:1.65}
-    .btn{
-      appearance:none;border:0;cursor:pointer;
-      padding: 12px 14px;
-      border-radius: 14px;
-      font-weight: 900;
-      letter-spacing:.2px;
-      display:inline-flex;align-items:center;gap:10px;
-      text-decoration:none;
-      user-select:none;
-      width: fit-content;
-    }
-    .btn-primary{
-      background: linear-gradient(135deg, rgba(176,138,106,1), rgba(176,138,106,.80));
-      color:#fff;
-      box-shadow: 0 18px 45px rgba(176,138,106,.35);
-    }
-    .btn-soft{
-      background: rgba(255,255,255,.75);
-      border: 1px solid var(--line);
-      color: var(--accent2);
-    }
-    .row{display:flex; gap:10px; flex-wrap:wrap}
 
-    /* Hero card */
-    .hero{
-      background:#111;
-      color:#fff;
-    }
-    .hero::before{
-      content:"";
-      position:absolute; inset:0;
-      background:
-        linear-gradient(180deg, rgba(0,0,0,.18), rgba(0,0,0,.70)),
-        url("assets/img/hero.jpg") center/cover no-repeat;
-      transform: scale(1.03);
-      filter:saturate(1.05) contrast(1.02);
-    }
-    .hero::after{
-      content:"";
-      position:absolute; inset:0;
-      background: radial-gradient(750px 520px at 50% 12%, rgba(176,138,106,.35), transparent 55%);
-      mix-blend-mode: soft-light;
-    }
-    .hero .inner{position:relative}
-    .pill{
-      width: fit-content;
-      display:inline-flex; align-items:center; gap:10px;
-      padding: 10px 14px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.18);
-      background: rgba(0,0,0,.26);
-      backdrop-filter: blur(10px);
-      font-size: 13px;
-      letter-spacing:.2px;
-    }
-    .title{
-      margin: 4px 0 0;
-      font-size: clamp(30px, 5vw, 52px);
-      line-height:1.03;
-      letter-spacing:.4px;
-      text-shadow: 0 14px 35px rgba(0,0,0,.35);
-    }
     .sub{
       margin:0;
-      color: rgba(255,255,255,.86);
-      font-size: 16px;
-      line-height:1.6;
-      max-width: 52ch;
-    }
-    .heroFooter{
-      margin-top:auto;
-      display:flex;
-      flex-direction:column;
-      gap: 10px;
-    }
-
-    /* “popup style” content box (similar a tus screenshots) */
-    .box{
-      margin-top: 8px;
-      border-radius: 18px;
-      border: 1px solid rgba(176,138,106,.35);
-      background: rgba(255,255,255,.86);
-      padding: 14px;
-    }
-    .boxTitle{
-      display:flex; align-items:center; gap:10px;
-      font-weight: 1000;
-      color: var(--accent2);
-      margin-bottom: 6px;
-    }
-    .iconBadge{
-      width:36px; height:36px; border-radius: 12px;
-      display:grid; place-items:center;
-      border:1px solid rgba(176,138,106,.25);
-      background: rgba(176,138,106,.10);
-    }
-
-    /* Form */
-    .field{display:flex; flex-direction:column; gap:6px; margin-top: 10px}
-    label{font-weight: 900; color: var(--accent2); font-size: 13px; letter-spacing:.2px}
-    input, textarea{
-      width:100%;
-      padding: 12px 12px;
-      border-radius: 14px;
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,.85);
+      color: var(--muted);
       font-size: 15px;
+      line-height: 1.4;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+    }
+
+    .line{
+      height:1px;
+      background: linear-gradient(to right, transparent, var(--border), transparent);
+      margin: 12px 0;
+    }
+
+    .txt{
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      font-size: 15.5px;
+      line-height: 1.6;
+      color: var(--text);
+    }
+
+    /* Botón dorado estilo Canva */
+    .btn{
+      appearance:none;
+      border:0;
+      cursor:pointer;
+      width:100%;
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: var(--accent);
+      color:#fff;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      font-size: 16px;
+      font-weight: 650;
+      letter-spacing:.2px;
+      transition: transform .06s ease, filter .15s ease;
+    }
+    .btn:hover{ filter: brightness(.97); }
+    .btn:active{ transform: scale(.99); }
+
+    .btn.secondary{
+      background: transparent;
+      color: var(--accent-2);
+      border: 2px solid var(--border);
+    }
+
+    /* Inputs */
+    .field{
+      width:100%;
+      background:transparent;
+      border:0;
+      border-bottom: 2px solid var(--border);
+      padding: 12px 6px;
+      font-size: 16px;
       outline:none;
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
     }
-    textarea{min-height: 92px; resize: vertical}
-    .radioRow{
-      display:flex; gap:12px; flex-wrap:wrap;
-      margin-top: 8px;
+    .field::placeholder{ color:#9b8e82; }
+
+    .row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:center;
+      margin: 12px 0 8px;
     }
-    .radioPill{
-      display:flex; align-items:center; gap:8px;
-      padding: 10px 12px;
+
+    /* Radios estilo “pastilla” */
+    .choice{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color: var(--muted);
+      font-size: 15px;
+      padding: 6px 10px;
       border-radius: 999px;
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,.78);
-      font-weight: 900;
+      border: 1px solid transparent;
+      user-select:none;
+      cursor:pointer;
+    }
+    .choice input{ accent-color: var(--accent); }
+    .choice:hover{ border-color: rgba(184,155,117,.35); }
+
+    /* Badge / aviso */
+    .notice{
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: #fff;
+      border: 1px solid rgba(216,201,184,.9);
+      color: var(--muted);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    /* =========================================================
+       2) HERO (Portada)
+       ========================================================= */
+    .hero{
+      min-height: 560px;
+      display:flex;
+      align-items:flex-end;
+      justify-content:center;
+      background:
+        linear-gradient(to top, rgba(0,0,0,.52), rgba(0,0,0,.12), rgba(0,0,0,0)),
+        var(--hero-url);
+      background-size: cover;
+      background-position: center;
+    }
+    .hero-content{
+      width:100%;
+      padding: 22px 18px 18px;
+      text-align:center;
+      color:#fff;
+    }
+    .hero-title{
+      margin:0;
+      font-size: 38px;
+      line-height: 1.05;
+      font-weight: 750;
+      letter-spacing: .2px;
+      font-family: ui-serif, Georgia, "Times New Roman", serif;
+    }
+    .hero-date{
+      margin: 10px 0 0;
+      font-size: 15px;
+      opacity:.92;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+    }
+
+    /* Cuenta regresiva estilo “reloj” simple */
+    .countdown{
+      margin-top: 14px;
+      display:flex;
+      justify-content:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .cd-box{
+      min-width: 86px;
+      padding: 10px 10px 9px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.35);
+      background: rgba(0,0,0,.20);
+      backdrop-filter: blur(4px);
+    }
+    .cd-num{
+      font-family: ui-serif, Georgia, "Times New Roman", serif;
+      font-size: 26px;
+      font-weight: 800;
+      line-height: 1;
+    }
+    .cd-lab{
+      margin-top: 5px;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      font-size: 12px;
+      opacity: .9;
+      letter-spacing: .2px;
+    }
+
+    /* =========================================================
+       3) EVENTOS
+       ========================================================= */
+    .event-grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .pill{
+      display:inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      color: var(--accent-2);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      font-size: 12px;
+      background: #fff;
+    }
+    .event-box{
+      border: 1px solid rgba(216,201,184,.9);
+      border-radius: 16px;
+      padding: 12px 12px;
+      background: #fff;
+    }
+    .event-title{
+      margin: 0;
+      font-size: 18px;
+      color: var(--accent);
+      font-family: ui-serif, Georgia, "Times New Roman", serif;
+      font-weight: 750;
+    }
+    .event-meta{
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .link{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      margin-top: 10px;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color: var(--accent-2);
+      text-decoration:none;
+      font-weight: 650;
+    }
+    .link:hover{ text-decoration: underline; }
+
+    /* =========================================================
+       4) CARRUSEL (Fotos)
+       ========================================================= */
+    .carousel{
+      position:relative;
+      border-radius: 18px;
+      overflow:hidden;
+      border: 1px solid rgba(216,201,184,.9);
+      background:#fff;
+    }
+    .carousel-viewport{
+      width:100%;
+      aspect-ratio: 4/5;
+      overflow:hidden;
+      position:relative;
+    }
+    .carousel-track{
+      display:flex;
+      height:100%;
+      width:100%;
+      transform: translateX(0%);
+      transition: transform .35s ease;
+    }
+    .slide{
+      min-width:100%;
+      height:100%;
+      background:#fff;
+    }
+    .slide img{
+      width:100%;
+      height:100%;
+      object-fit: cover;
+      display:block;
+      cursor: zoom-in;
+    }
+    .nav-btn{
+      position:absolute;
+      top:50%;
+      transform: translateY(-50%);
+      width:42px; height:42px;
+      border-radius:999px;
+      border: 1px solid rgba(216,201,184,.95);
+      background: rgba(255,255,255,.92);
+      color: var(--accent-2);
+      display:grid;
+      place-items:center;
       cursor:pointer;
       user-select:none;
     }
-    .radioPill input{width:auto; margin:0}
-    .small{font-size: 13px; color: var(--muted)}
+    .nav-btn:active{ transform: translateY(-50%) scale(.98); }
+    .nav-btn.prev{ left:10px; }
+    .nav-btn.next{ right:10px; }
+    .dots{
+      display:flex;
+      justify-content:center;
+      gap:7px;
+      padding: 10px 10px 12px;
+      background:#fff;
+    }
+    .dot{
+      width:8px; height:8px;
+      border-radius:999px;
+      background: rgba(184,155,117,.35);
+      cursor:pointer;
+    }
+    .dot.active{ background: var(--accent); }
 
-    /* Dress images */
-    .dressGrid{
-      margin-top: 10px;
+    /* =========================================================
+       5) DRESS CODE (2 imágenes)
+       ========================================================= */
+    .dress-grid{
       display:grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      gap:10px;
+      margin-top:10px;
     }
-    .dressImg{
+    .thumb{
       border-radius: 16px;
       overflow:hidden;
-      border:1px solid var(--line);
+      border: 1px solid rgba(216,201,184,.95);
       background:#fff;
-      height: 220px;
+      cursor: zoom-in;
+      aspect-ratio: 3/4;
     }
-    .dressImg img{
-      width:100%; height:100%;
+    .thumb img{
+      width:100%;
+      height:100%;
       object-fit: cover;
       display:block;
     }
-    @media (max-width: 560px){
-      .dressGrid{grid-template-columns: 1fr}
-      .dressImg{height: 240px}
+    .caption{
+      margin-top:8px;
+      text-align:center;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      font-size: 13px;
+      color: var(--muted);
     }
 
-    /* Tips list */
-    ul{margin: 10px 0 0; padding-left: 18px}
-    li{margin: 8px 0}
-
-    /* Photos grid (pequeñas) */
-    .photosGrid{
-      margin-top: 10px;
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      flex: 1 1 auto;
-      align-content:start;
+    /* =========================================================
+       6) LISTAS (Música / RSVP)
+       ========================================================= */
+    .mini-list{
+      margin-top: 12px;
+      border: 1px solid rgba(216,201,184,.9);
+      border-radius: 16px;
+      background:#fff;
+      overflow:hidden;
     }
-    .ph{
+    .mini-item{
+      padding: 12px 12px;
+      border-top: 1px solid rgba(216,201,184,.55);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.45;
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .mini-item:first-child{ border-top:0; }
+    .mini-muted{
+      color: var(--muted);
+      font-size: 12.5px;
+      margin-top: 4px;
+    }
+    .mini-actions{
+      display:flex;
+      gap:8px;
+      align-items:center;
+    }
+    .mini-del{
+      border: 1px solid rgba(216,201,184,.9);
+      background:#fff;
+      color: var(--accent-2);
+      border-radius: 10px;
+      padding: 6px 8px;
+      cursor:pointer;
+      font-weight:700;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+    }
+
+    /* =========================================================
+       7) MODAL (zoom imágenes)
+       ========================================================= */
+    .modal{
+      position:fixed;
+      inset:0;
+      background: rgba(0,0,0,.78);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:16px;
+      z-index:9999;
+    }
+    .modal.open{ display:flex; }
+    .modal-inner{
+      width: min(980px, 100%);
+      height: min(88vh, 820px);
+      position: relative;
       border-radius: 16px;
       overflow:hidden;
-      border:1px solid var(--line);
-      background:#fff;
-      height: 170px;
-      position:relative;
+      background: rgba(0,0,0,.3);
+      border: 1px solid rgba(255,255,255,.18);
     }
-    .ph img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.02)}
-    .ph::after{
-      content:"";
-      position:absolute; inset:0;
-      background: linear-gradient(180deg, rgba(0,0,0,.00), rgba(0,0,0,.14));
-      pointer-events:none;
+    .modal-img{
+      width:100%;
+      height:100%;
+      object-fit: contain;
+      display:block;
+      background: rgba(0,0,0,.55);
     }
-    @media (max-width: 560px){
-      .photosGrid{grid-template-columns: 1fr 1fr}
-      .ph{height: 150px}
-    }
-
-    /* Music button floating */
-    .musicBtn{
-      position: fixed;
-      right: 14px;
-      bottom: 14px;
-      z-index: 999;
+    .modal-close{
+      position:absolute;
+      top: 10px;
+      right: 10px;
+      width: 44px;
+      height: 44px;
       border-radius: 999px;
-      padding: 12px 14px;
-      border:1px solid rgba(0,0,0,.10);
-      background: rgba(255,255,255,.90);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 18px 60px rgba(0,0,0,.18);
-      font-weight: 1000;
+      border: 1px solid rgba(255,255,255,.35);
+      background: rgba(0,0,0,.35);
+      color: #fff;
+      display:grid;
+      place-items:center;
       cursor:pointer;
-      display:flex; align-items:center; gap:10px;
-    }
-    .dot{
-      width:10px;height:10px;border-radius:99px;
-      background: var(--accent);
-      box-shadow: 0 0 0 5px rgba(176,138,106,.18);
-    }
-    .state{color:var(--muted); font-weight:1000}
-
-    /* Hidden YT iframe */
-    .ytAudio{
-      position: fixed;
-      left: -9999px;
-      top: -9999px;
-      width: 1px; height: 1px;
-      opacity: 0;
-      pointer-events:none;
+      font-size: 18px;
+      user-select:none;
     }
 
-    /* subtle divider */
-    .divider{
-      height:1px; background: rgba(0,0,0,.08);
-      width:100%; margin: 6px 0;
+    /* =========================================================
+       8) RESPONSIVE (tablet)
+       ========================================================= */
+    @media (min-width: 720px){
+      .wrap{ padding: 26px 16px 60px; }
+      .hero{ min-height: 640px; }
+      h2{ font-size: 34px; }
+      .carousel-viewport{ aspect-ratio: 16/11; }
+      .cd-box{ min-width: 96px; }
     }
   </style>
+
+  <!-- =========================================================
+       CONFIG (edita SOLO aquí si cambian cosas)
+       ========================================================= -->
+  <script>
+    // ------------- PORTADA -------------
+    const HERO_IMAGE = "assets/img/hero.jpg"; // Cambia aquí la imagen principal
+    const COUPLE_NAME = "Pedro y Nicole";
+    const EVENT_DATE_TEXT = "Sábado 18 Abril 2026";
+
+    // Cuenta regresiva (apunta a la CEREMONIA)
+    // Formato: YYYY-MM-DDTHH:MM:SS (hora local)
+    const COUNTDOWN_TARGET = "2026-04-18T13:45:00";
+
+    // ------------- MÚSICA -------------
+    // Para GitHub Pages lo más estable es un MP3 local.
+    const AUDIO_FILE = "assets/audio/tema.mp3";
+    const CLIP_START = 17; // inicio
+    const CLIP_END = 42;   // fin
+
+    // ------------- FOTOS PAREJA (carrusel) -------------
+    const COUPLE_PHOTOS = [
+      "assets/img/DSC06064.JPG",
+      "assets/img/DSC05947.JPG",
+      "assets/img/DSC05955.JPG",
+      "assets/img/DSC05975.JPG",
+      "assets/img/DSC05982.JPG",
+      "assets/img/DSC06124.JPG",
+      "assets/img/DSC06137.JPG",
+      "assets/img/DSC06144.JPG"
+    ];
+
+    // ------------- DRESS CODE -------------
+    const DRESS_MEN = "assets/img/dress-hombres.jfif";
+    const DRESS_WOMEN = "assets/img/dress-mujeres.jfif";
+  </script>
 </head>
 
 <body>
+  <main class="wrap">
 
-  <!-- 1) TARJETA PRESENTACIÓN (foto + música) -->
-  <section class="card hero">
-    <div class="inner">
-      <div class="pill">✨ Invitación · Boda</div>
-      <div class="title" id="names">Nicole & (Nombre)</div>
-      <p class="sub" id="heroLine">Acompáñanos a celebrar este día tan especial.</p>
+    <!-- =========================================================
+         1) HERO (Portada)
+         - Imagen + nombres + fecha + cuenta regresiva
+         ========================================================= -->
+    <section class="card hero" id="hero" aria-label="Portada">
+      <div class="hero-content">
+        <h1 class="hero-title" id="heroTitle">Pedro y Nicole</h1>
+        <p class="hero-date" id="heroDate">Sábado 18 Abril 2026</p>
 
-      <div class="pill">🗓️ <span id="eventDateText">Fecha · Hora</span></div>
-
-      <div class="heroFooter">
-        <div class="row">
-          <button class="btn btn-primary" id="musicStartBtn">🎶 Activar música</button>
-          <a class="btn btn-ghost btn-soft" href="#rsvpCard" style="text-decoration:none">⬇️ Desliza</a>
+        <!-- Cuenta regresiva estilo “reloj” -->
+        <div class="countdown" aria-label="Cuenta regresiva">
+          <div class="cd-box">
+            <div class="cd-num" id="cdDays">--</div>
+            <div class="cd-lab">DÍAS</div>
+          </div>
+          <div class="cd-box">
+            <div class="cd-num" id="cdHours">--</div>
+            <div class="cd-lab">HORAS</div>
+          </div>
+          <div class="cd-box">
+            <div class="cd-num" id="cdMins">--</div>
+            <div class="cd-lab">MIN</div>
+          </div>
+          <div class="cd-box">
+            <div class="cd-num" id="cdSecs">--</div>
+            <div class="cd-lab">SEG</div>
+          </div>
         </div>
-        <div class="small" style="color:rgba(255,255,255,.80)">
-          *En celulares, es necesaria la confirmaciónpara iniciar la música (regla del navegador).
+
+        <!-- Música: botón visible desde portada (tipo Canva) -->
+        <div style="margin-top:14px;">
+          <button class="btn" id="musicToggle" type="button">Reproducir música</button>
+          <p class="sub" style="margin-top:10px;">Si estás en celular, toca el botón para que suene.</p>
         </div>
       </div>
+    </section>
+
+    <!-- Audio oculto (controlado por JS) -->
+    <audio id="bgAudio" preload="auto">
+      <source id="audioSource" src="" type="audio/mpeg" />
+    </audio>
+
+    <!-- =========================================================
+         2) CEREMONIA + CELEBRACIÓN (en una tarjeta como pediste)
+         ========================================================= -->
+    <section class="card" id="eventos" aria-label="Ceremonia y Celebración">
+      <div class="card-inner">
+        <div class="card-head">
+          <div class="icon" aria-hidden="true">🗓️</div>
+          <h2>Ceremonia y Celebración</h2>
+          <p class="sub">Fecha, hora y ubicación.</p>
+        </div>
+
+        <div class="event-grid">
+          <!-- CEREMONIA -->
+          <div class="event-box">
+            <span class="pill">Ceremonia</span>
+            <p class="event-title" style="margin-top:8px;">Parroquia Nuestra Señora del Carmen</p>
+            <p class="event-meta">
+              <strong>Sábado 18 Abril 2026</strong><br/>
+              1:45pm<br/>
+              Mata de plátano
+            </p>
+            <a class="link" href="https://maps.apple/p/fX2YAIX9YdYe38" target="_blank" rel="noopener">
+              📍 Cómo llegar
+            </a>
+          </div>
+
+          <!-- CELEBRACIÓN -->
+          <div class="event-box">
+            <span class="pill">Celebración</span>
+            <p class="event-title" style="margin-top:8px;">Venue: Vista Capital</p>
+            <p class="event-meta">
+              <strong>Sábado 18 Abril 2026</strong><br/>
+              4:30pm
+            </p>
+            <a class="link" href="https://maps.apple/p/KkTTaIGTe4BoH5" target="_blank" rel="noopener">
+              📍 Cómo llegar
+            </a>
+          </div>
+        </div>
+
+        <div class="notice">
+          <strong>Evento solo para adultos.</strong><br/>
+          Para que todos disfruten al máximo, agradecemos no asistir con niños.
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         3) FOTOS (Carrusel + zoom)
+         ========================================================= -->
+    <section class="card" id="fotos" aria-label="Fotos de la pareja">
+      <div class="card-inner">
+        <div class="card-head">
+          <div class="icon" aria-hidden="true">📷</div>
+          <h2>Fotos</h2>
+          <p class="sub">Desliza o usa las flechas. Toca una foto para ampliarla.</p>
+        </div>
+
+        <div class="carousel" aria-label="Carrusel de fotos">
+          <div class="carousel-viewport">
+            <div class="carousel-track" id="carouselTrack">
+              <!-- Slides se inyectan por JS -->
+            </div>
+
+            <button class="nav-btn prev" id="prevBtn" type="button" aria-label="Anterior">‹</button>
+            <button class="nav-btn next" id="nextBtn" type="button" aria-label="Siguiente">›</button>
+          </div>
+
+          <div class="dots" id="dots">
+            <!-- Dots se inyectan por JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         4) MÚSICA (Sugerir canción) - lista (local)
+         - Esto simula Canva: los invitados agregan sugerencias
+         - Se guarda en el navegador del invitado (sin backend)
+         ========================================================= -->
+    <section class="card" id="sugerencias" aria-label="Sugerencias de música">
+      <div class="card-inner">
+        <div class="card-head">
+          <div class="icon" aria-hidden="true">🎶</div>
+          <h2>Música</h2>
+          <p class="sub">Sugiere una canción que te gustaría escuchar.</p>
+        </div>
+
+        <input class="field" id="songName" type="text" placeholder="Tu nombre (opcional)" />
+        <div style="height:10px;"></div>
+        <input class="field" id="songTitle" type="text" placeholder="Nombre de la canción (ej: Artist - Song)" required />
+        <div style="height:14px;"></div>
+        <button class="btn" id="addSong" type="button">Agregar a la lista</button>
+
+        <div class="mini-list" id="songList" aria-label="Lista de sugerencias">
+          <!-- Items se inyectan por JS -->
+        </div>
+
+        <p class="sub" style="margin-top:10px;">
+          Nota: sin un servidor, esta lista se guarda en el dispositivo del invitado.
+        </p>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         5) DRESS CODE (Gala - Formal) + 2 imágenes + zoom
+         ========================================================= -->
+    <section class="card" id="dresscode" aria-label="Código de vestimenta">
+      <div class="card-inner">
+        <div class="card-head">
+          <div class="icon" aria-hidden="true">👗</div>
+          <h2>Dress code</h2>
+          <p class="sub"><strong>Gala - Formal</strong></p>
+        </div>
+
+        <div class="dress-grid">
+          <div>
+            <div class="thumb" id="dressMenThumb" title="Click para ampliar">
+              <img id="dressMenImg" alt="Ejemplo hombres" />
+            </div>
+            <div class="caption">Hombres (ejemplo)</div>
+          </div>
+
+          <div>
+            <div class="thumb" id="dressWomenThumb" title="Click para ampliar">
+              <img id="dressWomenImg" alt="Ejemplo mujeres" />
+            </div>
+            <div class="caption">Mujeres (ejemplo)</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         6) TIPS Y NOTAS (como tu ejemplo)
+         ========================================================= -->
+    <section class="card" id="tips" aria-label="Tips y notas">
+      <div class="card-inner">
+        <div class="card-head">
+          <div class="icon" aria-hidden="true">📋</div>
+          <h2>Tips y Notas</h2>
+          <p class="sub">Detalles importantes para disfrutar.</p>
+        </div>
+
+        <div class="txt" style="text-align:center;">
+          • ¡Por favor ser puntuales!<br/><br/>
+          • Queremos que disfrutes de esta fiesta al máximo, por eso decidimos que sea un evento sólo para adultos.<br/><br/>
+          • ¡Confirmar asistencia a la brevedad!<br/><br/>
+          • Llevar abrigo para disfrutar de los espacios exteriores.<br/><br/>
+          • Olvidarse de todo, y ¡¡¡a disfrutar!!!
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         7) REGALOS (BAC + IBAN + SINPE)
+         ========================================================= -->
+    <section class="card" id="regalos" aria-label="Regalos">
+      <div class="card-inner">
+        <div class="card-head">
+          <div class="icon" aria-hidden="true">🎁</div>
+          <h2>Regalos</h2>
+          <p class="sub">Si deseas contribuir, aquí está la información.</p>
+        </div>
+
+        <div class="txt" style="text-align:center;">
+          <strong>Cliente:</strong> NICOLE SEGURA GRANADOS<br/><br/>
+          <strong>Número de cuenta BAC:</strong><br/>
+          943500488<br/><br/>
+          <strong>Número de cuenta IBAN:</strong><br/>
+          CR26010200009435004881<br/><br/>
+          <strong>SINPE:</strong><br/>
+          70992183 / 86949063
+        </div>
+
+        <div class="notice">
+          Si prefieres SINPE Móvil, puedes usar cualquiera de los dos números.
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         8) ASISTENCIA (RSVP) - sin WhatsApp, sin buscar nada
+         - Guarda la confirmación en el navegador del invitado
+         - Visualmente tipo Canva
+         ========================================================= -->
+    <section class="card" id="asistencia" aria-label="Confirmación de asistencia">
+      <div class="card-inner">
+        <div class="card-head">
+          <div class="icon" aria-hidden="true">🎉</div>
+          <h2>¿Asistes a la celebración?</h2>
+          <p class="sub">Confirma tu asistencia por favor.</p>
+        </div>
+
+        <form id="rsvpForm">
+          <div class="row" role="radiogroup" aria-label="Asistencia">
+            <label class="choice">
+              <input type="radio" name="asistencia" value="Sí, confirmo" checked />
+              <span>¡Sí! Confirmo</span>
+            </label>
+
+            <label class="choice">
+              <input type="radio" name="asistencia" value="No puedo" />
+              <span>No puedo ☹️</span>
+            </label>
+          </div>
+
+          <input class="field" name="nombre" id="rsvpNombre" type="text" placeholder="Nombre completo" required />
+          <div style="height:10px;"></div>
+          <input class="field" name="nota" id="rsvpNota" type="text" placeholder="Información importante (ej: Soy vegetariano)" />
+          <div style="height:10px;"></div>
+          <input class="field" name="cantidad" id="rsvpCantidad" type="number" min="1" max="10" placeholder="Cantidad de adultos (opcional)" />
+
+          <div style="height:16px;"></div>
+          <button class="btn" type="submit" id="rsvpEnviar">Enviar</button>
+          <div style="height:10px;"></div>
+          <button class="btn secondary" type="button" id="rsvpVer">Ver mi confirmación</button>
+
+          <p class="sub" id="rsvpEstado" style="margin-top:12px; display:none;"></p>
+        </form>
+
+        <div class="mini-list" id="rsvpSaved" style="display:none;" aria-label="Confirmación guardada">
+          <!-- se llena por JS -->
+        </div>
+
+        <p class="sub" style="margin-top:10px;">
+          Nota: para guardar respuestas “centralizadas” como Canva, luego lo conectamos a un formulario real.
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =========================================================
+       MODAL (Zoom imágenes)
+       ========================================================= -->
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="modal-inner">
+      <img class="modal-img" id="modalImg" alt="Imagen ampliada" />
+      <button class="modal-close" id="modalClose" type="button" aria-label="Cerrar">✕</button>
     </div>
-  </section>
-
-  <div class="wrap">
-
-    <!-- 2) TARJETA ASISTENCIA (WhatsApp) -->
-    <section class="card" id="rsvpCard">
-      <div class="inner">
-        <div class="box">
-          <div class="boxTitle">
-            <div class="iconBadge">🎉</div>
-            <div style="font-size:20px">¿Asistes a la celebración?</div>
-          </div>
-
-          <div class="radioRow">
-            <label class="radioPill"><input type="radio" name="asiste" value="Sí, confirmo" checked> ¡Sí! Confirmo</label>
-            <label class="radioPill"><input type="radio" name="asiste" value="No puedo"> No puedo 😢</label>
-          </div>
-
-          <div class="field">
-            <label>Nombre completo</label>
-            <input id="rsvpName" placeholder="Pon tu nombre aquí" />
-          </div>
-
-          <div class="field">
-            <label>Información importante</label>
-            <textarea id="rsvpNote" placeholder="Ej: alergias / iré con 1 acompañante"></textarea>
-          </div>
-
-          <div class="row" style="margin-top:12px">
-            <button class="btn btn-primary" id="sendWhatsBtn">Enviar</button>
-            <button class="btn btn-soft" id="clearBtn" type="button">Limpiar</button>
-          </div>
-
-          <div class="divider"></div>
-          <div class="small"><b>Importante:</b> evento solo para adultos. <b>No niños</b> 🙏</div>
-        </div>
-
-        <div class="muted" style="margin-top:auto">
-          Tu confirmación se envía por WhatsApp a la pareja.
-        </div>
-      </div>
-    </section>
-
-    <!-- 3) TARJETA CÓDIGO DE VESTIMENTA -->
-    <section class="card" id="dressCard">
-      <div class="inner">
-        <h2>👗 Código de vestimenta</h2>
-        <p class="muted"><b>Gala - Formal</b></p>
-
-        <div class="dressGrid">
-          <div class="dressImg" title="Ejemplos para hombres">
-            <img src="assets/img/dress-hombres.jfif" alt="Ejemplos de vestimenta para hombres">
-          </div>
-          <div class="dressImg" title="Ejemplos para mujeres">
-            <img src="assets/img/dress-mujeres.jfif" alt="Ejemplos de vestimenta para mujeres">
-          </div>
-        </div>
-
-        <div class="muted" style="margin-top:auto">
-          Tip: tonos sobrios, telas elegantes y zapatos acordes.
-        </div>
-      </div>
-    </section>
-
-    <!-- 4) TARJETA REGALOS (SINPE) -->
-    <section class="card" id="giftsCard">
-      <div class="inner">
-        <div class="box">
-          <div class="boxTitle">
-            <div class="iconBadge">🎁</div>
-            <div style="font-size:22px">Regalos</div>
-          </div>
-
-          <p class="muted" style="margin:0">
-            Tu presencia es lo más importante. Si deseas tener un detalle, puedes contribuir mediante:
-          </p>
-
-          <div style="margin-top:12px" class="muted">
-            <b>SINPE Móvil</b><br>
-            <span style="font-size:18px;font-weight:1000;color:var(--accent2)">7099 2183</span><br>
-            <span style="font-size:18px;font-weight:1000;color:var(--accent2)">8694 9063</span>
-          </div>
-
-          <div class="small" style="margin-top:10px">
-            (ajustar estos datos)
-          </div>
-        </div>
-
-        <div class="muted" style="margin-top:auto">
-          Gracias por su cariño 💛
-        </div>
-      </div>
-    </section>
-
-    <!-- 5) TARJETA TIPS -->
-    <section class="card" id="tipsCard">
-      <div class="inner">
-        <div class="box">
-          <div class="boxTitle">
-            <div class="iconBadge">📋</div>
-            <div style="font-size:22px">Tips y Notas</div>
-          </div>
-
-          <ul class="muted">
-            <li><b>¡Por favor ser puntuales!</b></li>
-            <li>Queremos que disfrutes al máximo, por eso decidimos que sea un evento <b>solo para adultos</b>.</li>
-            <li><b>Confirmar asistencia</b> a la brevedad (antes de la fecha límite que indique la pareja).</li>
-            <li>Llevar abrigo si deseas disfrutar de los espacios exteriores.</li>
-            <li>Olvidarse de todo… y ¡¡¡a disfrutar!!!</li>
-          </ul>
-        </div>
-
-        <div class="muted" style="margin-top:auto">
-          Cualquier duda, la pareja te responde por WhatsApp.
-        </div>
-      </div>
-    </section>
-
-    <!-- 6) TARJETA FOTOS (pequeñas) -->
-    <section class="card" id="photosCard">
-      <div class="inner">
-        <h2>📸 Fotos</h2>
-        <p class="muted" style="margin-top:0">Un poquito de nosotros…</p>
-
-        <div class="photosGrid">
-          <div class="ph"><img src="assets/img/DSC06064.JPG" alt="Foto 1"></div>
-          <div class="ph"><img src="assets/img/DSC05947.JPG" alt="Foto 2"></div>
-          <div class="ph"><img src="assets/img/DSC05955.JPG" alt="Foto 3"></div>
-          <div class="ph"><img src="assets/img/DSC06124.JPG" alt="Foto 4"></div>
-          <div class="ph"><img src="assets/img/DSC06137.JPG" alt="Foto 5"></div>
-          <div class="ph"><img src="assets/img/DSC06144.JPG" alt="Foto 6"></div>
-          <div class="ph"><img src="assets/img/DSC05975.JPG" alt="Foto 7"></div>
-          <div class="ph"><img src="assets/img/DSC05982.JPG" alt="Foto 8"></div>
-        </div>
-
-        <div class="muted" style="margin-top:auto">
-          Hecho con cariño 💛
-        </div>
-      </div>
-    </section>
   </div>
 
-  <!-- Música: YouTube oculto -->
-  <div class="ytAudio"><div id="player"></div></div>
-
-  <!-- Botón música flotante -->
-  <button class="musicBtn" id="musicBtn" type="button" aria-label="Música">
-    <span class="dot" id="dot"></span>
-    <span>Música</span>
-    <span class="state" id="musicState">OFF</span>
-  </button>
-
   <script>
-    /***********************
-     * EDITA SOLO ESTO 👇  *
-     ***********************/
-    const DATA = {
-      nombres: "Nicole & Pedro",
-      heroLine: "Acompáñanos a celebrar este día tan especial.",
-      // PON AQUÍ LA FECHA/HORA REAL (CR -06:00). Ej: "2026-08-22T16:00:00-06:00"
-      fechaEventoISO: "2026-08-22T16:00:00-06:00",
-      whatsappDestino: "50670992183"
-    };
+    /* =========================================================
+       INICIALIZACIÓN (no tocar si no hace falta)
+       ========================================================= */
 
-    // Música YouTube: tu link rbaoKL1Ei0c
-    // OJO: tú escribiste "127 al 42", pero eso no tiene sentido.
-    // Yo lo dejo en 17 -> 42 como ella pidió antes. Si de verdad es 127 -> 142, cambia aquí:
-    const YT_SEGMENT = { videoId: "rbaoKL1Ei0c", start: 17, end: 42 };
-    /***********************/
+    // --- 1) HERO: setear imagen y textos ---
+    const hero = document.getElementById("hero");
+    hero.style.setProperty("--hero-url", `url('${HERO_IMAGE}')`);
+    document.getElementById("heroTitle").textContent = COUPLE_NAME;
+    document.getElementById("heroDate").textContent = EVENT_DATE_TEXT;
 
-    // UI text
-    document.getElementById("names").textContent = DATA.nombres;
-    document.getElementById("heroLine").textContent = DATA.heroLine;
+    // --- 2) AUDIO: setear fuente ---
+    const audio = document.getElementById("bgAudio");
+    const audioSource = document.getElementById("audioSource");
+    audioSource.src = AUDIO_FILE;
+    audio.load();
 
-    // Date text
-    const eventDate = new Date(DATA.fechaEventoISO);
-    const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
-    const fmt = new Intl.DateTimeFormat("es-CR", { weekday:"long", year:"numeric", month:"long", day:"numeric" });
-    const tmt = new Intl.DateTimeFormat("es-CR", { hour:"numeric", minute:"2-digit" });
-    document.getElementById("eventDateText").textContent = `${cap(fmt.format(eventDate))} · ${tmt.format(eventDate)}`;
+    // Música: autoplay suele fallar, usamos botón
+    const musicToggle = document.getElementById("musicToggle");
+    let playing = false;
 
-    /***********************
-     * RSVP -> WhatsApp     *
-     ***********************/
-    function getAsisteValue(){
-      const checked = document.querySelector('input[name="asiste"]:checked');
-      return checked ? checked.value : "Sí, confirmo";
+    function clampClip(){
+      if (audio.currentTime < CLIP_START) audio.currentTime = CLIP_START;
+      if (audio.currentTime >= CLIP_END) audio.currentTime = CLIP_START;
     }
+    audio.addEventListener("timeupdate", clampClip);
 
-    function buildWhatsAppMessage(){
-      const nombre = (document.getElementById("rsvpName").value || "").trim();
-      const nota = (document.getElementById("rsvpNote").value || "").trim();
-      const asiste = getAsisteValue();
-
-      const fechaTxt = `${cap(fmt.format(eventDate))} · ${tmt.format(eventDate)}`;
-
-      let msg = `*Confirmación de asistencia*\n`;
-      msg += `• Asistencia: *${asiste}*\n`;
-      msg += `• Nombre: *${nombre || "Anónimo"}*\n`;
-      msg += `• Evento: ${DATA.nombres}\n`;
-      msg += `• Fecha: ${fechaTxt}\n`;
-      if (nota) msg += `• Nota: ${nota}\n`;
-
-      return msg;
-    }
-
-    document.getElementById("sendWhatsBtn").addEventListener("click", () => {
-      const number = (DATA.whatsappDestino || "").trim();
-      if (!number || number === "50600000000"){
-        alert("Falta configurar el número de WhatsApp (whatsappDestino) en DATA.");
-        return;
+    musicToggle.addEventListener("click", async () => {
+      try{
+        if(!playing){
+          audio.currentTime = CLIP_START;
+          await audio.play();
+          playing = true;
+          musicToggle.textContent = "Pausar música";
+        } else {
+          audio.pause();
+          playing = false;
+          musicToggle.textContent = "Reproducir música";
+        }
+      } catch(e){
+        alert("El navegador bloqueó el audio. Toca de nuevo o revisa el volumen.");
       }
-      const msg = buildWhatsAppMessage();
-      const url = `https://wa.me/${encodeURIComponent(number)}?text=${encodeURIComponent(msg)}`;
-      window.open(url, "_blank", "noopener");
     });
 
-    document.getElementById("clearBtn").addEventListener("click", () => {
-      document.getElementById("rsvpName").value = "";
-      document.getElementById("rsvpNote").value = "";
+    // --- 3) MODAL (zoom imágenes) ---
+    const modal = document.getElementById("modal");
+    const modalImg = document.getElementById("modalImg");
+    const modalClose = document.getElementById("modalClose");
+
+    function openModal(src){
+      modalImg.src = src;
+      modal.classList.add("open");
+      modal.setAttribute("aria-hidden","false");
+      document.body.style.overflow = "hidden";
+    }
+    function closeModal(){
+      modal.classList.remove("open");
+      modal.setAttribute("aria-hidden","true");
+      document.body.style.overflow = "";
+    }
+    modalClose.addEventListener("click", closeModal);
+    modal.addEventListener("click", (e) => {
+      // Cerrar si clic fuera de la imagen/contenedor
+      if(e.target === modal) closeModal();
+    });
+    window.addEventListener("keydown", (e) => {
+      if(e.key === "Escape") closeModal();
     });
 
-    /***********************
-     * Música YouTube API   *
-     ***********************/
-    let player = null;
-    let isPlaying = false;
+    // --- 4) CARRUSEL ---
+    const track = document.getElementById("carouselTrack");
+    const dots = document.getElementById("dots");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
 
-    const musicBtn = document.getElementById("musicBtn");
-    const musicState = document.getElementById("musicState");
-    const dot = document.getElementById("dot");
-    const musicStartBtn = document.getElementById("musicStartBtn");
+    let idx = 0;
 
-    const tag = document.createElement("script");
-    tag.src = "https://www.youtube.com/iframe_api";
-    document.head.appendChild(tag);
+    function buildCarousel(){
+      track.innerHTML = "";
+      dots.innerHTML = "";
 
-    window.onYouTubeIframeAPIReady = function(){
-      player = new YT.Player("player", {
-        height:"1", width:"1",
-        videoId: YT_SEGMENT.videoId,
-        playerVars: { autoplay:0, controls:0, disablekb:1, fs:0, modestbranding:1, rel:0, start: YT_SEGMENT.start }
+      COUPLE_PHOTOS.forEach((src, i) => {
+        const slide = document.createElement("div");
+        slide.className = "slide";
+
+        const img = document.createElement("img");
+        img.src = src;
+        img.alt = `Foto ${i+1}`;
+        img.addEventListener("click", () => openModal(src));
+
+        slide.appendChild(img);
+        track.appendChild(slide);
+
+        const dot = document.createElement("div");
+        dot.className = "dot" + (i === 0 ? " active" : "");
+        dot.addEventListener("click", () => {
+          idx = i;
+          renderCarousel();
+        });
+        dots.appendChild(dot);
       });
 
-      // Loop del segmento
-      setInterval(() => {
-        if(!player || !isPlaying) return;
-        const t = player.getCurrentTime ? player.getCurrentTime() : 0;
-        if (t >= YT_SEGMENT.end - 0.15){
-          player.seekTo(YT_SEGMENT.start, true);
-          player.playVideo();
-        }
-      }, 200);
-    };
-
-    function setMusicUI(on){
-      isPlaying = on;
-      musicState.textContent = on ? "ON" : "OFF";
-      musicState.style.color = on ? "#0f7a3a" : "var(--muted)";
-      dot.style.background = on ? "#0f7a3a" : "var(--accent)";
+      renderCarousel();
     }
 
-    function playMusic(){
-      if(!player) return;
-      player.seekTo(YT_SEGMENT.start, true);
-      player.playVideo();
-      setMusicUI(true);
-    }
-    function pauseMusic(){
-      if(!player) return;
-      player.pauseVideo();
-      setMusicUI(false);
+    function renderCarousel(){
+      track.style.transform = `translateX(-${idx * 100}%)`;
+      [...dots.children].forEach((d, i) => d.classList.toggle("active", i === idx));
     }
 
-    musicBtn.addEventListener("click", () => {
-      if(!player) return;
-      if(!isPlaying) playMusic();
-      else pauseMusic();
+    function next(){
+      idx = (idx + 1) % COUPLE_PHOTOS.length;
+      renderCarousel();
+    }
+    function prev(){
+      idx = (idx - 1 + COUPLE_PHOTOS.length) % COUPLE_PHOTOS.length;
+      renderCarousel();
+    }
+
+    nextBtn.addEventListener("click", next);
+    prevBtn.addEventListener("click", prev);
+
+    // Soporte swipe simple para móvil
+    let startX = 0;
+    track.addEventListener("touchstart", (e) => { startX = e.touches[0].clientX; }, {passive:true});
+    track.addEventListener("touchend", (e) => {
+      const endX = e.changedTouches[0].clientX;
+      const dx = endX - startX;
+      if(Math.abs(dx) > 40){
+        if(dx < 0) next(); else prev();
+      }
     });
 
-    musicStartBtn.addEventListener("click", () => playMusic());
+    buildCarousel();
+
+    // --- 5) DRESS CODE imágenes + zoom ---
+    const dressMenImg = document.getElementById("dressMenImg");
+    const dressWomenImg = document.getElementById("dressWomenImg");
+    dressMenImg.src = DRESS_MEN;
+    dressWomenImg.src = DRESS_WOMEN;
+
+    document.getElementById("dressMenThumb").addEventListener("click", () => openModal(DRESS_MEN));
+    document.getElementById("dressWomenThumb").addEventListener("click", () => openModal(DRESS_WOMEN));
+
+    // --- 6) LISTA DE MÚSICA (localStorage) ---
+    const songName = document.getElementById("songName");
+    const songTitle = document.getElementById("songTitle");
+    const addSong = document.getElementById("addSong");
+    const songList = document.getElementById("songList");
+
+    const SONG_KEY = "wedding_song_suggestions_v1";
+
+    function loadSongs(){
+      try{ return JSON.parse(localStorage.getItem(SONG_KEY) || "[]"); }
+      catch{ return []; }
+    }
+    function saveSongs(list){
+      localStorage.setItem(SONG_KEY, JSON.stringify(list));
+    }
+
+    function renderSongs(){
+      const list = loadSongs();
+      songList.innerHTML = "";
+
+      if(list.length === 0){
+        const empty = document.createElement("div");
+        empty.className = "mini-item";
+        empty.innerHTML = `<div><strong>Lista vacía</strong><div class="mini-muted">Sé el primero en sugerir una canción.</div></div>`;
+        songList.appendChild(empty);
+        return;
+      }
+
+      list.forEach((item, i) => {
+        const row = document.createElement("div");
+        row.className = "mini-item";
+
+        const left = document.createElement("div");
+        left.innerHTML = `<strong>${escapeHtml(item.title)}</strong>
+                          <div class="mini-muted">${item.name ? "Por: " + escapeHtml(item.name) : "Sugerencia"}</div>`;
+
+        const actions = document.createElement("div");
+        actions.className = "mini-actions";
+
+        const del = document.createElement("button");
+        del.className = "mini-del";
+        del.type = "button";
+        del.textContent = "✕";
+        del.addEventListener("click", () => {
+          const newList = loadSongs().filter((_, idx) => idx !== i);
+          saveSongs(newList);
+          renderSongs();
+        });
+
+        actions.appendChild(del);
+        row.appendChild(left);
+        row.appendChild(actions);
+        songList.appendChild(row);
+      });
+    }
+
+    addSong.addEventListener("click", () => {
+      const title = (songTitle.value || "").trim();
+      const name = (songName.value || "").trim();
+      if(!title){
+        songTitle.focus();
+        alert("Escribe el nombre de la canción.");
+        return;
+      }
+      const list = loadSongs();
+      list.unshift({ title, name, ts: Date.now() });
+      saveSongs(list);
+      songTitle.value = "";
+      renderSongs();
+    });
+
+    renderSongs();
+
+    // --- 7) RSVP (local, sin WhatsApp, sin configurar nada) ---
+    const rsvpForm = document.getElementById("rsvpForm");
+    const rsvpEstado = document.getElementById("rsvpEstado");
+    const rsvpSaved = document.getElementById("rsvpSaved");
+    const rsvpVer = document.getElementById("rsvpVer");
+
+    const RSVP_KEY = "wedding_rsvp_v1";
+
+    function loadRSVP(){
+      try{ return JSON.parse(localStorage.getItem(RSVP_KEY) || "null"); }
+      catch{ return null; }
+    }
+    function saveRSVP(obj){
+      localStorage.setItem(RSVP_KEY, JSON.stringify(obj));
+    }
+
+    function renderRSVP(){
+      const data = loadRSVP();
+      if(!data){
+        rsvpSaved.style.display = "none";
+        rsvpSaved.innerHTML = "";
+        return;
+      }
+      rsvpSaved.style.display = "block";
+      rsvpSaved.innerHTML = `
+        <div class="mini-item">
+          <div>
+            <strong>${escapeHtml(data.nombre)}</strong>
+            <div class="mini-muted">${escapeHtml(data.asistencia)}${data.cantidad ? " · Adultos: " + escapeHtml(String(data.cantidad)) : ""}</div>
+            <div class="mini-muted">${data.nota ? "Nota: " + escapeHtml(data.nota) : ""}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    rsvpForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const asistencia = rsvpForm.querySelector('input[name="asistencia"]:checked')?.value || "Sí, confirmo";
+      const nombre = (document.getElementById("rsvpNombre").value || "").trim();
+      const nota = (document.getElementById("rsvpNota").value || "").trim();
+      const cantidad = (document.getElementById("rsvpCantidad").value || "").trim();
+
+      if(!nombre){
+        alert("Por favor escribe tu nombre.");
+        return;
+      }
+
+      saveRSVP({
+        asistencia,
+        nombre,
+        nota,
+        cantidad: cantidad ? Number(cantidad) : null,
+        ts: Date.now()
+      });
+
+      rsvpEstado.style.display = "block";
+      rsvpEstado.textContent = "¡Listo! Confirmación guardada en este dispositivo. 💛";
+      rsvpEstado.style.color = "#2a2520";
+
+      rsvpForm.reset();
+      const firstRadio = rsvpForm.querySelector('input[type="radio"][name="asistencia"]');
+      if(firstRadio) firstRadio.checked = true;
+
+      renderRSVP();
+    });
+
+    rsvpVer.addEventListener("click", () => {
+      renderRSVP();
+      if(!loadRSVP()){
+        alert("Aún no hay confirmación guardada en este dispositivo.");
+      } else {
+        // Scroll suave a la tarjeta guardada
+        rsvpSaved.scrollIntoView({behavior:"smooth", block:"nearest"});
+      }
+    });
+
+    renderRSVP();
+
+    // --- 8) CUENTA REGRESIVA ---
+    const cdDays = document.getElementById("cdDays");
+    const cdHours = document.getElementById("cdHours");
+    const cdMins = document.getElementById("cdMins");
+    const cdSecs = document.getElementById("cdSecs");
+
+    function pad2(n){ return String(n).padStart(2,"0"); }
+
+    function tickCountdown(){
+      const target = new Date(COUNTDOWN_TARGET).getTime();
+      const now = Date.now();
+      let diff = target - now;
+
+      if(diff <= 0){
+        cdDays.textContent = "00";
+        cdHours.textContent = "00";
+        cdMins.textContent = "00";
+        cdSecs.textContent = "00";
+        return;
+      }
+
+      const s = Math.floor(diff / 1000);
+      const days = Math.floor(s / (3600*24));
+      const hours = Math.floor((s % (3600*24)) / 3600);
+      const mins = Math.floor((s % 3600) / 60);
+      const secs = Math.floor(s % 60);
+
+      cdDays.textContent = pad2(days);
+      cdHours.textContent = pad2(hours);
+      cdMins.textContent = pad2(mins);
+      cdSecs.textContent = pad2(secs);
+    }
+    tickCountdown();
+    setInterval(tickCountdown, 1000);
+
+    // --- Helper: evitar inyección en listas (seguro) ---
+    function escapeHtml(str){
+      return String(str)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
   </script>
 </body>
 </html>
