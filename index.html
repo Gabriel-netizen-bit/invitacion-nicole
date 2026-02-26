@@ -16,6 +16,7 @@
 
 <!-- mejora el preview en móviles -->
 <meta name="twitter:card" content="summary_large_image">
+
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="color-scheme" content="light only" />
@@ -202,20 +203,28 @@
       line-height: 1.45;
     }
 
+   
     /* =========================================================
-       2) HERO (Portada)
-       ========================================================= */
-    .hero{
-      min-height: 560px;
-      display:flex;
-      align-items:flex-end;
-      justify-content:center;
-      background:
-        linear-gradient(to top, rgba(0,0,0,.52), rgba(0,0,0,.12), rgba(0,0,0,0)),
-        var(--hero-url);
-      background-size: cover;
-      background-position: center;
-    }
+   HERO (Portada)
+   Fondo con fallback + soporte para JS (--hero-url)
+   ========================================================= */
+
+.hero{
+  min-height: 560px;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+
+  /* usa variable si existe, si no usa hero.jpg */
+  background:
+    linear-gradient(to top, rgba(0,0,0,.52), rgba(0,0,0,.12), rgba(0,0,0,0)),
+    var(--hero-url, url("assets/img/hero.jpg"));
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+    
     .hero-content{
       width:100%;
       padding: 22px 18px 18px;
