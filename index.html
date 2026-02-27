@@ -1,26 +1,22 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <!-- =========================================================
-     PREVIEW para Instagram, WhatsApp, etc (Open Graph)
-     ========================================================= -->
-
-<meta property="og:title" content="Pedro y Nicole | Invitación de boda" />
-<meta property="og:description" content="Te invitamos a celebrar nuestra boda. Toca para ver los detalles." />
-
-<!-- IMPORTANTE: usa una imagen real que exista en GitHub -->
-<meta property="og:image" content="https://gabriel-netizen-bit.github.io/invitacion-nicole/assets/img/hero.jpg" />
-
-<meta property="og:url" content="https://gabriel-netizen-bit.github.io/invitacion-nicole/" />
-<meta property="og:type" content="website" />
-
-<!-- mejora el preview en móviles -->
-<meta name="twitter:card" content="summary_large_image">
-
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="color-scheme" content="light only" />
   <title>Invitación | Pedro y Nicole</title>
+
+  <!-- =========================================================
+       PREVIEW para Instagram / Facebook / WhatsApp (Open Graph)
+       IMPORTANTE: og:image debe ser URL absoluta y existir.
+       No afecta tu CSS/JS; solo mejora el "preview".
+       ========================================================= -->
+  <meta property="og:title" content="Pedro y Nicole | Invitación de boda" />
+  <meta property="og:description" content="Te invitamos a celebrar con nosotros. Toca para ver los detalles." />
+  <meta property="og:image" content="https://gabriel-netizen-bit.github.io/invitacion-nicole/assets/img/DSC05947.JPG" />
+  <meta property="og:url" content="https://gabriel-netizen-bit.github.io/invitacion-nicole/" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
 
   <style>
     /* =========================================================
@@ -37,7 +33,9 @@
       --shadow: 0 18px 45px rgba(0,0,0,.10);
       --radius: 22px;
       --maxw: 560px;
-      --hero-url: none; /* se setea por JS */
+
+      /* Hero por JS (pero con fallback para que NUNCA se quede en blanco) */
+      --hero-url: url("assets/img/DSC05947.JPG");
     }
 
     /* =========================================================
@@ -203,28 +201,22 @@
       line-height: 1.45;
     }
 
-   
     /* =========================================================
-   HERO (Portada)
-   Fondo con fallback + soporte para JS (--hero-url)
-   ========================================================= */
-
-.hero{
-  min-height: 560px;
-  display:flex;
-  align-items:flex-end;
-  justify-content:center;
-
-  /* usa variable si existe, si no usa hero.jpg */
-  background:
-    linear-gradient(to top, rgba(0,0,0,.52), rgba(0,0,0,.12), rgba(0,0,0,0)),
-    var(--hero-url, url("assets/img/hero.jpg"));
-
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-    
+       2) HERO (Portada)
+       - Importante: ahora tiene fallback seguro (no se queda vacío)
+       ========================================================= */
+    .hero{
+      min-height: 560px;
+      display:flex;
+      align-items:flex-end;
+      justify-content:center;
+      background:
+        linear-gradient(to top, rgba(0,0,0,.52), rgba(0,0,0,.12), rgba(0,0,0,0)),
+        var(--hero-url, url("assets/img/DSC05947.JPG"));
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
     .hero-content{
       width:100%;
       padding: 22px 18px 18px;
@@ -427,6 +419,7 @@
 
     /* =========================================================
        6) LISTAS (Música / RSVP)
+       - UI igual, pero ahora ENVIAMOS a una hoja central (Apps Script)
        ========================================================= */
     .mini-list{
       margin-top: 12px;
@@ -532,13 +525,20 @@
        ========================================================= -->
   <script>
     // ------------- PORTADA -------------
-    const HERO_IMAGE = "assets/img/hero.jpg"; // Cambia aquí la imagen principal
+    // ✅ Nic_05: hero fijo a DSC05947.JPG (no dependemos de hero.jpg)
+    const HERO_IMAGE = "assets/img/DSC05947.JPG";
     const COUPLE_NAME = "Pedro y Nicole";
     const EVENT_DATE_TEXT = "Sábado 18 Abril 2026";
 
     // Cuenta regresiva (apunta a la CEREMONIA)
     // Formato: YYYY-MM-DDTHH:MM:SS (hora local)
     const COUNTDOWN_TARGET = "2026-04-18T13:45:00";
+
+    // ------------- LISTAS CENTRALIZADAS (Apps Script) -------------
+    // ✅ Nic_05: RSVP + Música se guardan en una hoja real (tipo Canva).
+    // Pega aquí la URL de tu Web App de Google Apps Script (Deploy -> Web App -> Anyone).
+    // Ejemplo: https://script.google.com/macros/s/XXXX/exec
+    const SHEET_ENDPOINT = ""; // <-- PEGAR AQUÍ
 
     // ------------- MÚSICA -------------
     // Para GitHub Pages lo más estable es un MP3 local.
@@ -610,7 +610,7 @@
     </audio>
 
     <!-- =========================================================
-         2) CEREMONIA + CELEBRACIÓN (en una tarjeta como pediste)
+         2) CEREMONIA + CELEBRACIÓN
          ========================================================= -->
     <section class="card" id="eventos" aria-label="Ceremonia y Celebración">
       <div class="card-inner">
@@ -685,9 +685,10 @@
     </section>
 
     <!-- =========================================================
-         4) MÚSICA (Sugerir canción) - lista (local)
-         - Esto simula Canva: los invitados agregan sugerencias
-         - Se guarda en el navegador del invitado (sin backend)
+         4) MÚSICA (Sugerir canción)
+         ✅ Nic_05: envía a hoja central (Apps Script).
+         - Se mantiene el mismo look.
+         - Guardamos también local como “respaldo” del invitado.
          ========================================================= -->
     <section class="card" id="sugerencias" aria-label="Sugerencias de música">
       <div class="card-inner">
@@ -703,12 +704,14 @@
         <div style="height:14px;"></div>
         <button class="btn" id="addSong" type="button">Agregar a la lista</button>
 
+        <p class="sub" id="songStatus" style="margin-top:12px; display:none;"></p>
+
         <div class="mini-list" id="songList" aria-label="Lista de sugerencias">
           <!-- Items se inyectan por JS -->
         </div>
 
         <p class="sub" style="margin-top:10px;">
-         <!-- Nota: sin un servidor, esta lista se guarda en el dispositivo del invitado.-->
+          Tu sugerencia se enviará a la lista central. (Si no hay conexión, se guarda como respaldo en tu dispositivo.)
         </p>
       </div>
     </section>
@@ -743,7 +746,7 @@
     </section>
 
     <!-- =========================================================
-         6) TIPS Y NOTAS (como tu ejemplo)
+         6) TIPS Y NOTAS
          ========================================================= -->
     <section class="card" id="tips" aria-label="Tips y notas">
       <div class="card-inner">
@@ -764,7 +767,7 @@
     </section>
 
     <!-- =========================================================
-         7) REGALOS (BAC + IBAN + SINPE)
+         7) REGALOS
          ========================================================= -->
     <section class="card" id="regalos" aria-label="Regalos">
       <div class="card-inner">
@@ -791,9 +794,10 @@
     </section>
 
     <!-- =========================================================
-         8) ASISTENCIA (RSVP) - sin WhatsApp, sin buscar nada
-         - Guarda la confirmación en el navegador del invitado
-         - Visualmente tipo Canva
+         8) ASISTENCIA (RSVP)
+         ✅ Nic_05: envía a hoja central (Apps Script).
+         - UI igual.
+         - Guardamos también local como respaldo.
          ========================================================= -->
     <section class="card" id="asistencia" aria-label="Confirmación de asistencia">
       <div class="card-inner">
@@ -835,7 +839,7 @@
         </div>
 
         <p class="sub" style="margin-top:10px;">
-          <!--Nota: para guardar respuestas “centralizadas” como Canva, luego lo conectamos a un formulario real.-->
+          Tu confirmación se enviará a la lista central. (Si no hay conexión, se guarda como respaldo en tu dispositivo.)
         </p>
       </div>
     </section>
@@ -854,12 +858,15 @@
 
   <script>
     /* =========================================================
-       INICIALIZACIÓN (no tocar si no hace falta)
+       NIC_05 - LÓGICA
+       - Mantiene estética Nic_04
+       - Agrega: Hero fijo + OG preview + listas centralizadas
        ========================================================= */
 
     // --- 1) HERO: setear imagen y textos ---
     const hero = document.getElementById("hero");
-    hero.style.setProperty("--hero-url", `url('${HERO_IMAGE}')`);
+    // Cache-buster suave para evitar “se quedó pegada la vieja”
+    hero.style.setProperty("--hero-url", `url('${HERO_IMAGE}?v=5')`);
     document.getElementById("heroTitle").textContent = COUPLE_NAME;
     document.getElementById("heroDate").textContent = EVENT_DATE_TEXT;
 
@@ -874,6 +881,7 @@
     let playing = false;
 
     function clampClip(){
+      // Loop del fragmento (17s a 42s)
       if (audio.currentTime < CLIP_START) audio.currentTime = CLIP_START;
       if (audio.currentTime >= CLIP_END) audio.currentTime = CLIP_START;
     }
@@ -883,7 +891,7 @@
       try{
         if(!playing){
           audio.currentTime = CLIP_START;
-          await audio.play();
+          await audio.play(); // requiere interacción del usuario (este botón)
           playing = true;
           musicToggle.textContent = "Pausar música";
         } else {
@@ -914,7 +922,6 @@
     }
     modalClose.addEventListener("click", closeModal);
     modal.addEventListener("click", (e) => {
-      // Cerrar si clic fuera de la imagen/contenedor
       if(e.target === modal) closeModal();
     });
     window.addEventListener("keydown", (e) => {
@@ -974,7 +981,7 @@
     nextBtn.addEventListener("click", next);
     prevBtn.addEventListener("click", prev);
 
-    // Soporte swipe simple para móvil
+    // Swipe simple para móvil
     let startX = 0;
     track.addEventListener("touchstart", (e) => { startX = e.touches[0].clientX; }, {passive:true});
     track.addEventListener("touchend", (e) => {
@@ -996,13 +1003,46 @@
     document.getElementById("dressMenThumb").addEventListener("click", () => openModal(DRESS_MEN));
     document.getElementById("dressWomenThumb").addEventListener("click", () => openModal(DRESS_WOMEN));
 
-    // --- 6) LISTA DE MÚSICA (localStorage) ---
+    /* =========================================================
+       6) NIC_05: ENVÍO CENTRALIZADO (Apps Script -> Google Sheet)
+       - Sin backend propio, ideal para GitHub Pages.
+       - Si no configuras SHEET_ENDPOINT, no falla: usa respaldo local.
+       ========================================================= */
+    async function sendToSheet(payload){
+      if(!SHEET_ENDPOINT){
+        // No bloqueamos: devolvemos "no enviado" para que UI lo diga bonito.
+        return { ok:false, reason:"NO_ENDPOINT" };
+      }
+      try{
+        const res = await fetch(SHEET_ENDPOINT, {
+          method: "POST",
+          headers: {"Content-Type":"application/json"},
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json().catch(()=>({}));
+        if(!res.ok || data.ok !== true){
+          return { ok:false, reason:"HTTP_OR_SCRIPT" };
+        }
+        return { ok:true };
+      }catch(err){
+        return { ok:false, reason:"NETWORK" };
+      }
+    }
+
+    function showStatus(el, msg, ok=true){
+      el.style.display = "block";
+      el.textContent = msg;
+      el.style.color = ok ? "#2a2520" : "#8b5a2b";
+    }
+
+    // --- 7) LISTA DE MÚSICA (respaldo local + envío central) ---
     const songName = document.getElementById("songName");
     const songTitle = document.getElementById("songTitle");
     const addSong = document.getElementById("addSong");
     const songList = document.getElementById("songList");
+    const songStatus = document.getElementById("songStatus");
 
-    const SONG_KEY = "wedding_song_suggestions_v1";
+    const SONG_KEY = "wedding_song_suggestions_v2"; // v2 para no mezclar con pruebas viejas
 
     function loadSongs(){
       try{ return JSON.parse(localStorage.getItem(SONG_KEY) || "[]"); }
@@ -1052,7 +1092,7 @@
       });
     }
 
-    addSong.addEventListener("click", () => {
+    addSong.addEventListener("click", async () => {
       const title = (songTitle.value || "").trim();
       const name = (songName.value || "").trim();
       if(!title){
@@ -1060,22 +1100,42 @@
         alert("Escribe el nombre de la canción.");
         return;
       }
+
+      // 1) Respaldo local (para que el usuario vea feedback inmediato)
       const list = loadSongs();
       list.unshift({ title, name, ts: Date.now() });
       saveSongs(list);
-      songTitle.value = "";
       renderSongs();
+
+      // 2) Envío central (Apps Script)
+      showStatus(songStatus, "Enviando a la lista central...", true);
+      const resp = await sendToSheet({
+        type: "MUSICA",
+        name,
+        song: title,
+        timestamp: new Date().toISOString(),
+        page: location.href
+      });
+
+      if(resp.ok){
+        showStatus(songStatus, "¡Listo! Canción enviada ✅", true);
+      }else{
+        // No asustar: el respaldo local ya quedó guardado.
+        showStatus(songStatus, "Guardado en tu dispositivo. (Aún falta configurar la lista central).", false);
+      }
+
+      songTitle.value = "";
     });
 
     renderSongs();
 
-    // --- 7) RSVP (local, sin WhatsApp, sin configurar nada) ---
+    // --- 8) RSVP (respaldo local + envío central) ---
     const rsvpForm = document.getElementById("rsvpForm");
     const rsvpEstado = document.getElementById("rsvpEstado");
     const rsvpSaved = document.getElementById("rsvpSaved");
     const rsvpVer = document.getElementById("rsvpVer");
 
-    const RSVP_KEY = "wedding_rsvp_v1";
+    const RSVP_KEY = "wedding_rsvp_v2";
 
     function loadRSVP(){
       try{ return JSON.parse(localStorage.getItem(RSVP_KEY) || "null"); }
@@ -1104,7 +1164,7 @@
       `;
     }
 
-    rsvpForm.addEventListener("submit", (e) => {
+    rsvpForm.addEventListener("submit", async (e) => {
       e.preventDefault();
 
       const asistencia = rsvpForm.querySelector('input[name="asistencia"]:checked')?.value || "Sí, confirmo";
@@ -1117,17 +1177,33 @@
         return;
       }
 
-      saveRSVP({
+      // 1) Respaldo local inmediato
+      const payloadLocal = {
         asistencia,
         nombre,
         nota,
         cantidad: cantidad ? Number(cantidad) : null,
         ts: Date.now()
+      };
+      saveRSVP(payloadLocal);
+
+      // 2) Envío central
+      showStatus(rsvpEstado, "Enviando confirmación...", true);
+      const resp = await sendToSheet({
+        type: "RSVP",
+        attendance: asistencia,
+        name: nombre,
+        note: nota,
+        adults: cantidad ? Number(cantidad) : "",
+        timestamp: new Date().toISOString(),
+        page: location.href
       });
 
-      rsvpEstado.style.display = "block";
-      rsvpEstado.textContent = "¡Listo! Confirmación guardada en este dispositivo. 💛";
-      rsvpEstado.style.color = "#2a2520";
+      if(resp.ok){
+        showStatus(rsvpEstado, "¡Listo! Confirmación enviada ✅", true);
+      }else{
+        showStatus(rsvpEstado, "Confirmación guardada en tu dispositivo. (Aún falta configurar la lista central).", false);
+      }
 
       rsvpForm.reset();
       const firstRadio = rsvpForm.querySelector('input[type="radio"][name="asistencia"]');
@@ -1141,14 +1217,13 @@
       if(!loadRSVP()){
         alert("Aún no hay confirmación guardada en este dispositivo.");
       } else {
-        // Scroll suave a la tarjeta guardada
         rsvpSaved.scrollIntoView({behavior:"smooth", block:"nearest"});
       }
     });
 
     renderRSVP();
 
-    // --- 8) CUENTA REGRESIVA ---
+    // --- 9) CUENTA REGRESIVA ---
     const cdDays = document.getElementById("cdDays");
     const cdHours = document.getElementById("cdHours");
     const cdMins = document.getElementById("cdMins");
