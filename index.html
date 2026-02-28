@@ -539,7 +539,7 @@
     // Pega aquí la URL de tu Web App de Google Apps Script (Deploy -> Web App -> Anyone).
     // Ejemplo: https://script.google.com/macros/s/XXXX/exec
     // ------------- LISTAS CENTRALIZADAS (Apps Script) -------------
-    const SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbx1XpmALVrbhtxs6-AAjw234E0E4Wb0PVHyQVI59YLFWVRZYn-MtvQTIJO58KbIHJc7Sg/exec";
+    const SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbwaDJRLRHUSf2mJyqKmGiIiuoCsFQIXDVV5Y-EQ13Xxp7T5U5Tu5r6ygLup16XLAp-ZPA/exec";
 
     // ------------- MÚSICA -------------
     // Para GitHub Pages lo más estable es un MP3 local.
@@ -856,45 +856,6 @@
       <button class="modal-close" id="modalClose" type="button" aria-label="Cerrar">✕</button>
     </div>
   </div>
-
-<!-- =========================================================
-       boton de prueba
-       ========================================================= -->
-
-<button id="testPost" style="position:fixed;bottom:12px;right:12px;z-index:9999;padding:10px;">
-  TEST RSVP
-</button>
-
-<script>
-const SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbx1XpmALVrbhtxs6-AAjw234E0E4Wb0PVHyQVI59YLFWVRZYn-MtvQTIJO58KbIHJc7Sg/exec";
-
-document.getElementById("testPost").addEventListener("click", async () => {
-  try{
-    const r = await fetch(SHEET_ENDPOINT, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        type: "RSVP",
-        name: "Prueba Percy",
-        attendance: "SI",
-        adults: 2,
-        note: "test desde botón",
-        page: "test"
-      })
-    });
-    const txt = await r.text();
-    alert("RESPUESTA: " + txt);
-  } catch(e){
-    alert("ERROR: " + e.message);
-  }
-});
-</script>
-
-<!-- =========================================================
-       boton de prueba ********
-       ========================================================= -->
-
-
 
 
   <script>
