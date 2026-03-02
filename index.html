@@ -518,6 +518,106 @@
       .carousel-viewport{ aspect-ratio: 16/11; }
       .cd-box{ min-width: 96px; }
     }
+/*==========cierre calas==========*/
+
+.final{
+    padding: 38px 16px 18px;
+    background: #fbfaf8;
+    text-align:center;
+  }
+  .final__wrap{
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .final__names{
+    margin: 26px 0 6px;
+    font-size: 44px;
+    line-height: 1.05;
+    letter-spacing: .5px;
+    color: #b9a36a; /* dorado suave */
+    font-family: inherit;
+  }
+  .final__text{
+    margin: 0 0 18px;
+    font-size: 20px;
+    color: #b9a36a;
+  }
+  /* Aquí pon tu imagen de CALAS (arriba y abajo) */
+  .final__flowers{
+    height: 105px;
+    background-size: contain;
+    background-repeat: repeat-x;
+    background-position: center;
+    opacity: .95;
+  }
+  .final__flowers--top{
+    background-image: url("assets/img/calas-banner.png");
+  }
+  .final__flowers--bottom{
+    background-image: url("assets/img/calas-banner.png");
+    transform: rotate(180deg);
+  }
+  .final__brand{
+    margin-top: 14px;
+    font-size: 14px;
+    color: #9a8c6a;
+  }
+/*==========cierre cierre calas==========*/
+
+/*-----------Flores laterales------*/
+    
+  /* Ocultas por defecto (móvil) */
+  .calas-side{
+    display:none;
+    pointer-events:none;
+    position:fixed;
+    top:0;
+    height:100vh;
+    width:240px;               /* ancho del adorno */
+    opacity:.18;               /* sutileza */
+    z-index:0;                 /* detrás del contenido */
+    background-repeat:no-repeat;
+    background-size:contain;
+    background-position:center;
+    filter:saturate(.9) contrast(.95);
+  }
+
+  /* Aparecen desde tablet/PC */
+  @media (min-width: 900px){
+    .calas-side{ display:block; }
+    .calas-left{
+      left:0;
+      background-image:url("assets/img/calas-left.png");
+      transform: translateX(-10px); /* apenas hacia afuera */
+    }
+    .calas-right{
+      right:0;
+      background-image:url("assets/img/calas-right.png");
+      transform: translateX(10px);
+    }
+
+    /* Le damos "aire" al contenido para que no se monte encima */
+    body{
+      padding-left: 110px;
+      padding-right: 110px;
+    }
+  }
+
+  /* Para pantallas MUY grandes: un poquito más de marco */
+  @media (min-width: 1300px){
+    .calas-side{ width:300px; opacity:.16; }
+    body{ padding-left: 140px; padding-right: 140px; }
+  }
+
+  /* Si tu contenido ya usa un contenedor con z-index, no hace falta esto.
+     Pero por si acaso, asegura que el contenido esté sobre las calas: */
+  main, header, section, footer{
+    position:relative;
+    z-index:1;
+  }
+
+
+/*-----------cierre flores laterales------*/
   </style>
 
   <!-- =========================================================
@@ -858,7 +958,25 @@
   </div>
 
 
+  <!-- =================== CIERRE (CALAS) =================== -->
+  <!-- ====================================================== -->
+
+  <section class="final" id="final">
+  <div class="final__wrap">
+    <div class="final__flowers final__flowers--top"></div>
+
+    <h2 class="final__names" id="finalNames"></h2>
+    <p class="final__text">¡Los esperamos!</p>
+
+    <div class="final__flowers final__flowers--bottom"></div>
+
+    <p class="final__brand">Desarrollado <span>ExcluEvent</span></p>
+  </div>
+</section>
+
+
   <script>
+  
     /* =========================================================
        NIC_05 - LÓGICA
        - Mantiene estética Nic_04
@@ -871,6 +989,7 @@
     hero.style.setProperty("--hero-url", `url('${HERO_IMAGE}?v=5')`);
     document.getElementById("heroTitle").textContent = COUPLE_NAME;
     document.getElementById("heroDate").textContent = EVENT_DATE_TEXT;
+
 
     // --- 2) AUDIO: setear fuente ---
     
@@ -1270,70 +1389,15 @@
         .replaceAll('"',"&quot;")
         .replaceAll("'","&#039;");
     }
+    document.getElementById("finalNames").textContent = COUPLE_NAME;
+
   </script>
-  <!-- =================== CIERRE (CALAS) =================== -->
-<section class="final" id="final">
-  <div class="final__wrap">
-    <div class="final__flowers final__flowers--top"></div>
+ 
 
-    <h2 class="final__names" id="finalNames"></h2>
-    <p class="final__text">¡Los esperamos!</p>
+<!-- ====== CALAS LATERALES (solo tablet/PC) ====== -->
+<div class="calas-side calas-left" aria-hidden="true"></div>
+<div class="calas-side calas-right" aria-hidden="true"></div>
 
-    <div class="final__flowers final__flowers--bottom"></div>
 
-    <p class="final__brand">Desarrollado con ❤️ por <span>ExcluEvent</span></p>
-  </div>
-</section>
-
-<style>
-  .final{
-    padding: 38px 16px 18px;
-    background: #fbfaf8;
-    text-align:center;
-  }
-  .final__wrap{
-    max-width: 720px;
-    margin: 0 auto;
-  }
-  .final__names{
-    margin: 26px 0 6px;
-    font-size: 44px;
-    line-height: 1.05;
-    letter-spacing: .5px;
-    color: #b9a36a; /* dorado suave */
-    font-family: inherit;
-  }
-  .final__text{
-    margin: 0 0 18px;
-    font-size: 20px;
-    color: #b9a36a;
-  }
-  /* Aquí pon tu imagen de CALAS (arriba y abajo) */
-  .final__flowers{
-    height: 105px;
-    background-size: contain;
-    background-repeat: repeat-x;
-    background-position: center;
-    opacity: .95;
-  }
-  .final__flowers--top{
-    background-image: url("assets/img/calas-banner.png");
-  }
-  .final__flowers--bottom{
-    background-image: url("assets/img/calas-banner.png");
-    transform: rotate(180deg);
-  }
-  .final__brand{
-    margin-top: 14px;
-    font-size: 14px;
-    color: #9a8c6a;
-  }
-</style>
-
-<script>
-  // Usa el nombre centralizado
-  document.getElementById("finalNames").textContent = COUPLE_NAME;
-</script>
-<!-- =================== /CIERRE =================== -->
 </body>
 </html>
