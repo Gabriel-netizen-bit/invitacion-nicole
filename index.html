@@ -123,6 +123,7 @@
       color: var(--text);
     }
 
+
     /* Botón dorado estilo Canva */
     .btn{
       appearance:none;
@@ -218,10 +219,10 @@
       background-repeat: no-repeat;
     }
     .hero-content{
-      width:100%;
-      padding: 22px 18px 18px;
+      /*width:100%;*/
+      padding: 18px 18px 18px;
       text-align:center;
-      color:#fff;
+      /*:#fff;*/
     }
     .hero-title{
       margin:0;
@@ -690,12 +691,12 @@
          - Imagen + nombres + fecha + cuenta regresiva
          ========================================================= -->
     <section class="card hero" id="hero" aria-label="Portada">
-      <div class="hero-content">
+      <!--div class="hero-content">
         <h1 class="hero-title" id="heroTitle">Pedro y Nicole</h1>
         <p class="hero-date" id="heroDate">Sábado 18 Abril 2026</p>
 
-        <!-- Cuenta regresiva estilo “reloj” -->
-        <div class="countdown" aria-label="Cuenta regresiva">
+        <Cuenta regresiva estilo “reloj” -->
+        <!--div class="countdown" aria-label="Cuenta regresiva">
           <div class="cd-box">
             <div class="cd-num" id="cdDays">--</div>
             <div class="cd-lab">DÍAS</div>
@@ -712,15 +713,49 @@
             <div class="cd-num" id="cdSecs">--</div>
             <div class="cd-lab">SEG</div>
           </div>
-        </div>
+        </div-->
 
         <!-- Música: botón visible desde portada (tipo Canva) -->
-        <div style="margin-top:14px;">
+        <!--div style="margin-top:14px;">        
           <button class="btn" id="musicToggle" type="button">Reproducir música</button>
           <p class="sub" style="margin-top:10px;">Si estás en celular, toca el botón para que suene.</p>
         </div>
-      </div>
+      </div-->
+      <div class="hero-content">
+  <h1 class="hero-title" id="heroTitle">Pedro y Nicole</h1>
+  <p class="hero-date" id="heroDate">Sábado 18 Abril 2026</p>
+</div>
     </section>
+    <!-- Extras debajo de la portada: cuenta regresiva + música -->
+<section class="card" id="heroExtras">
+  <div class="card-inner" style="text-align:center;">
+    
+    <div class="countdown" aria-label="Cuenta regresiva">
+      <div class="cd-box">
+        <div class="cd-num" id="cdDays">--</div>
+        <div class="cd-lab">DÍAS</div>
+      </div>
+      <div class="cd-box">
+        <div class="cd-num" id="cdHours">--</div>
+        <div class="cd-lab">HORAS</div>
+      </div>
+      <div class="cd-box">
+        <div class="cd-num" id="cdMins">--</div>
+        <div class="cd-lab">MIN</div>
+      </div>
+      <div class="cd-box">
+        <div class="cd-num" id="cdSecs">--</div>
+        <div class="cd-lab">SEG</div>
+      </div>
+    </div>
+
+    <div style="margin-top:14px;">
+      <button class="btn" id="musicToggle" type="button">Reproducir música</button>
+      <p class="sub" style="margin-top:10px;">Si estás en celular, toca el botón para que suene.</p>
+    </div>
+
+  </div>
+</section>
 
     <!-- Audio oculto (controlado por JS) -->
     <audio id="bgAudio" preload="auto">
