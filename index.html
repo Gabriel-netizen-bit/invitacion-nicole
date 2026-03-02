@@ -639,7 +639,24 @@
     // Pega aquí la URL de tu Web App de Google Apps Script (Deploy -> Web App -> Anyone).
     // Ejemplo: https://script.google.com/macros/s/XXXX/exec
     // ------------- LISTAS CENTRALIZADAS (Apps Script) -------------
-    const SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbxKy9B-BbeDlHzaxwELu9XAW1cg2eoQLwleOr6FC-4Q3rWcMLN_lDQh4MeTrhY9B5WC_Q/exec"; // e.g. https://script.google.com/macros/s/AKfy.../exec
+    const SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbxKy9B-BbeDlHzaxwELu9XAW1cg2eoQLwleOr6FC-4Q3rWcMLN_lDQh4MeTrhY9B5WC_Q/exec";
+    // ----------------- UI helpers (status) -----------------
+    // Evita errores si el status no existe; muestra feedback sin romper el flujo.
+    function showStatus(el, msg, ok){
+      try{
+        if(!el) return;
+        el.style.display = "block";
+        el.textContent = msg || "";
+        el.style.padding = "10px 12px";
+        el.style.borderRadius = "12px";
+        el.style.marginTop = "10px";
+        el.style.fontSize = "14px";
+        el.style.lineHeight = "1.25";
+        el.style.border = "1px solid rgba(0,0,0,.10)";
+        el.style.background = ok ? "rgba(46, 204, 113, 0.12)" : "rgba(231, 76, 60, 0.12)";
+      }catch(_){}
+    }
+ // e.g. https://script.google.com/macros/s/AKfy.../exec
     // ------------- MÚSICA -------------
     // Para GitHub Pages lo más estable es un MP3 local.
     const AUDIO_FILE = "assets/audio/tema.mp3";
