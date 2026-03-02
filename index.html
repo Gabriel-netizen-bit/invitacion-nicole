@@ -539,8 +539,7 @@
     // Pega aquí la URL de tu Web App de Google Apps Script (Deploy -> Web App -> Anyone).
     // Ejemplo: https://script.google.com/macros/s/XXXX/exec
     // ------------- LISTAS CENTRALIZADAS (Apps Script) -------------
-    const SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbwaDJRLRHUSf2mJyqKmGiIiuoCsFQIXDVV5Y-EQ13Xxp7T5U5Tu5r6ygLup16XLAp-ZPA/exec";
-
+    const SHEET_ENDPOINT = "https://script.google.com/macros/s/TU_ID/exec";
     // ------------- MÚSICA -------------
     // Para GitHub Pages lo más estable es un MP3 local.
     const AUDIO_FILE = "assets/audio/tema.mp3";
@@ -873,6 +872,7 @@
     document.getElementById("heroDate").textContent = EVENT_DATE_TEXT;
 
     // --- 2) AUDIO: setear fuente ---
+    
     const audio = document.getElementById("bgAudio");
     const audioSource = document.getElementById("audioSource");
     audioSource.src = AUDIO_FILE;
