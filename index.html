@@ -1136,7 +1136,48 @@
        - Sin backend propio, ideal para GitHub Pages.
        - Si no configuras SHEET_ENDPOINT, no falla: usa respaldo local.
        ========================================================= */
-    async function sendToSheet(payload){
+       
+let RESOLVED_ENDPOINT = null;
+
+async function getResolvedEndpoint(){
+  if (RESOLVED_ENDPOINT) return RESOLVED_ENDPOINT;
+
+  // 1) Hacemos un GET para que Google haga su redirección
+  const r = await fetch(SHEET_ENDPOINT, { method: "GET" });
+
+  // 2) Guardamos la URL FINAL real (googleusercontent)
+  RESOLVED_ENDPOINT = r.url;
+
+  return RESOLVED_ENDPOINT;
+}
+
+async function sendToSheet(payload){
+  if(!SHEET_ENDPOINT){
+    return { ok:false, reason:"NO_ENDPOINT" };
+  }
+
+  try{
+    const url = await getResolvedEndpoint();
+
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json().catch(()=>({}));
+
+    if(!res.ok || data.ok !== true){
+      return { ok:false, reason:"HTTP_OR_SCRIPT", status: res.status, data };
+    }
+
+    return { ok:true };
+  }catch(err){
+    return { ok:false, reason:"NETWORK", error: err.message };
+  }
+}
+
+    /*async function sendToSheet(payload){
       if(!SHEET_ENDPOINT){
         // No bloqueamos: devolvemos "no enviado" para que UI lo diga bonito.
         return { ok:false, reason:"NO_ENDPOINT" };
@@ -1155,7 +1196,7 @@
       }catch(err){
         return { ok:false, reason:"NETWORK" };
       }
-    }
+    }*/
 
     function showStatus(el, msg, ok=true){
       el.style.display = "block";
