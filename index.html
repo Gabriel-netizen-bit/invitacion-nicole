@@ -208,7 +208,7 @@
     .hero{
       min-height: 560px;
       display:flex;
-      align-items:flex-end;
+      align-items:flex-start;
       justify-content:center;
       background:
         linear-gradient(to top, rgba(0,0,0,.52), rgba(0,0,0,.12), rgba(0,0,0,0)),
@@ -1136,74 +1136,24 @@
        - Sin backend propio, ideal para GitHub Pages.
        - Si no configuras SHEET_ENDPOINT, no falla: usa respaldo local.
        ========================================================= */
-       
-let RESOLVED_ENDPOINT = null;
-
-async function getResolvedEndpoint(){
-  if (RESOLVED_ENDPOINT) return RESOLVED_ENDPOINT;
-
-  // 1) Hacemos un GET para que Google haga su redirección
-  const r = await fetch(SHEET_ENDPOINT, { method: "GET" });
-
-  // 2) Guardamos la URL FINAL real (googleusercontent)
-  RESOLVED_ENDPOINT = r.url;
-
-  return RESOLVED_ENDPOINT;
-}
-
-async function sendToSheet(payload){
-  if(!SHEET_ENDPOINT){
-    return { ok:false, reason:"NO_ENDPOINT" };
-  }
-
-  try{
-    const url = await getResolvedEndpoint();
-
-    const res = await fetch(url, {
-      method: "POST",
-      headers: {"Content-Type":"application/json"},
-      body: JSON.stringify(payload)
-    });
-
-    const data = await res.json().catch(()=>({}));
-
-    if(!res.ok || data.ok !== true){
-      return { ok:false, reason:"HTTP_OR_SCRIPT", status: res.status, data };
-    }
-
-    return { ok:true };
-  }catch(err){
-    return { ok:false, reason:"NETWORK", error: err.message };
-  }
-}
-
-    /*async function sendToSheet(payload){
+    async function sendToSheet(payload){
       if(!SHEET_ENDPOINT){
-        // No bloqueamos: devolvemos "no enviado" para que UI lo diga bonito.
         return { ok:false, reason:"NO_ENDPOINT" };
       }
       try{
-        const res = await fetch(SHEET_ENDPOINT, {
+        // Usamos no-cors para evitar el preflight (Apps Script no responde OPTIONS con CORS).
+        // Ojo: en no-cors no podemos leer respuesta, pero el envío sí se hace.
+        await fetch(SHEET_ENDPOINT, {
           method: "POST",
-          headers: {"Content-Type":"application/json"},
+          mode: "no-cors",
+          headers: {"Content-Type":"text/plain;charset=utf-8"},
           body: JSON.stringify(payload)
         });
-        const data = await res.json().catch(()=>({}));
-        if(!res.ok || data.ok !== true){
-          return { ok:false, reason:"HTTP_OR_SCRIPT" };
-        }
-        return { ok:true };
+        return { ok:true, reason:"SENT_NO_CORS" };
       }catch(err){
         return { ok:false, reason:"NETWORK" };
       }
-    }*/
-
-    function showStatus(el, msg, ok=true){
-      el.style.display = "block";
-      el.textContent = msg;
-      el.style.color = ok ? "#2a2520" : "#8b5a2b";
     }
-
     // --- 7) LISTA DE MÚSICA (respaldo local + envío central) ---
     const songName = document.getElementById("songName");
     const songTitle = document.getElementById("songTitle");
